@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preprocesamiento - Satoru Gojo Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 25%, #2d3561 50%, #4a5899 75%, #6b7fc9 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8f4f8;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 191, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(13, 17, 40, 0.85);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 
+                0 0 60px rgba(0, 191, 255, 0.3),
+                0 0 100px rgba(138, 43, 226, 0.2),
+                inset 0 0 80px rgba(0, 191, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(0, 191, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00bfff, #8a2be2, #00bfff);
+            border-radius: 25px;
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(90deg, transparent, #00bfff, #8a2be2, #00bfff, transparent) bottom;
+            background-size: 100% 3px;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #00bfff 0%, #6dd5ff 30%, #a78bfa 70%, #8a2be2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(0, 191, 255, 0.5);
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #6dd5ff;
+            font-size: 1.2rem;
+            font-weight: 300;
+            text-shadow: 0 0 20px rgba(109, 213, 255, 0.5);
+        }
+
+        .code-section {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(10, 14, 39, 0.8) 100%);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 35px;
+            border-left: 5px solid #00bfff;
+            border-right: 5px solid #8a2be2;
+            overflow-x: auto;
+            box-shadow: 
+                inset 0 0 30px rgba(0, 191, 255, 0.1),
+                0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .code-section h2 {
+            background: linear-gradient(90deg, #00bfff, #6dd5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        pre {
+            background: #000000;
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+            line-height: 1.7;
+            border: 1px solid rgba(0, 191, 255, 0.2);
+        }
+
+        code {
+            color: #6dd5ff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre;
+        }
+
+        .keyword {
+            color: #8a2be2;
+            font-weight: 600;
+        }
+
+        .string {
+            color: #00ff88;
+        }
+
+        .function {
+            color: #00bfff;
+            font-weight: 500;
+        }
+
+        .comment {
+            color: #7c8db5;
+            font-style: italic;
+        }
+
+        .number {
+            color: #ff6ec7;
+        }
+
+        .glossary {
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.7) 0%, rgba(42, 47, 97, 0.7) 100%);
+            border-radius: 18px;
+            padding: 35px;
+            border: 2px solid rgba(0, 191, 255, 0.3);
+            box-shadow: 
+                0 0 40px rgba(138, 43, 226, 0.2),
+                inset 0 0 40px rgba(0, 191, 255, 0.05);
+        }
+
+        .glossary h2 {
+            background: linear-gradient(90deg, #00bfff, #a78bfa, #8a2be2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .glossary-item {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 22px;
+            margin-bottom: 18px;
+            border-radius: 12px;
+            border-left: 4px solid #00bfff;
+            border-right: 4px solid #8a2be2;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .glossary-item:hover {
+            transform: translateX(8px) scale(1.02);
+            box-shadow: 
+                0 8px 30px rgba(0, 191, 255, 0.4),
+                0 8px 30px rgba(138, 43, 226, 0.4);
+            border-left-width: 6px;
+            border-right-width: 6px;
+        }
+
+        .function-name {
+            background: linear-gradient(90deg, #00bfff, #6dd5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .function-desc {
+            color: #e8f4f8;
+            line-height: 1.7;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .function-example {
+            background: #000000;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #6dd5ff;
+            font-size: 0.95rem;
+            margin-top: 12px;
+            border: 1px solid rgba(0, 191, 255, 0.3);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .code-section, .glossary {
+                padding: 22px;
+            }
+
+            pre {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .glossary-item {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖼️ Preprocesamiento</h1>
+            <p class="subtitle">Menú de procesamiento de imágenes con OpenCV</p>
+        </div>
+
+        <div class="code-section">
+            <h2>⚡ Código del Ejemplo</h2>
+            <pre><code><span class="keyword">import</span> cv2
+
+<span class="keyword">from</span> Coordenadas <span class="keyword">import</span> recortes
+<span class="keyword">from</span> Movimiento <span class="keyword">import</span> movimiento
+<span class="keyword">from</span> zoom_img <span class="keyword">import</span> zoom
+
+<span class="keyword">while</span> <span class="number">True</span>:
+    <span class="keyword">opcion</span>=<span class="function">int</span>(<span class="function">input</span>(<span class="string">"PROCESAMIENTO DE IMAGENES \n 1.Recortar \n 2.Girar \n 3.Zoom \n 4.Salir \n Selecciona una opcion:"</span>))
+
+    <span class="keyword">if</span> opcion==<span class="number">1</span>:
+        <span class="function">print</span>(<span class="string">"Ejecuta el archivo coordenadas"</span>)
+        <span class="function">recortes</span>()
+    <span class="keyword">elif</span> opcion==<span class="number">2</span>:
+        <span class="function">print</span>(<span class="string">"Ejecuta el archivo movimientos"</span>)
+        <span class="function">movimiento</span>()
+    <span class="keyword">elif</span> opcion==<span class="number">3</span>:
+        <span class="function">print</span>(<span class="string">"Ejecuta el archivo zoom"</span>)
+        <span class="function">zoom</span>()
+    <span class="keyword">elif</span> opcion==<span class="number">4</span>:
+        <span class="function">print</span>(<span class="string">"Salir del programa"</span>)
+    <span class="keyword">break</span></code></pre>
+        </div>
+
+        <div class="glossary">
+            <h2>👁️ Glosario de Funciones 👁️</h2>
+
+            <div class="glossary-item">
+                <div class="function-name">import cv2</div>
+                <div class="function-desc">
+                    Importa la librería OpenCV (Open Source Computer Vision Library), una biblioteca especializada en procesamiento de imágenes y visión por computadora. Aunque no se usa directamente en este código, se importa porque los módulos importados la necesitan.
+                </div>
+                <div class="function-example">
+                    import cv2<br>
+                    # Importa OpenCV para procesamiento de imágenes
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">from ... import ...</div>
+                <div class="function-desc">
+                    Importa funciones específicas desde otros archivos Python (módulos). Permite usar funciones definidas en archivos externos sin tener que importar todo el módulo. En este caso, importa las funciones recortes(), movimiento() y zoom() desde sus respectivos archivos.
+                </div>
+                <div class="function-example">
+                    from Coordenadas import recortes<br>
+                    # Importa la función recortes del archivo Coordenadas.py
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">while True:</div>
+                <div class="function-desc">
+                    Crea un bucle infinito que se ejecuta continuamente hasta que se encuentre una instrucción break. Permite que el programa muestre el menú repetidamente hasta que el usuario elija salir.
+                </div>
+                <div class="function-example">
+                    while True:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;# código que se repite<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;if salir:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">int()</div>
+                <div class="function-desc">
+                    Función integrada de Python que convierte un valor a un número entero. Se usa para convertir la entrada del usuario (que es texto) a un número que puede ser comparado en las condiciones if/elif.
+                </div>
+                <div class="function-example">
+                    numero = int("5")<br>
+                    # Convierte el texto "5" al número entero 5
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">input()</div>
+                <div class="function-desc">
+                    Función integrada de Python que solicita al usuario introducir datos desde la consola. Muestra el menú de opciones y espera a que el usuario escriba un número y presione Enter. El símbolo \n crea saltos de línea para organizar el menú.
+                </div>
+                <div class="function-example">
+                    opcion = input("Selecciona: \n 1.Opción 1 \n 2.Opción 2")<br>
+                    # Muestra un menú con saltos de línea
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">\n (salto de línea)</div>
+                <div class="function-desc">
+                    Carácter especial que representa un salto de línea. Cuando se usa en una cadena, hace que el texto siguiente aparezca en una nueva línea. Muy útil para formatear menús y hacer la interfaz más legible.
+                </div>
+                <div class="function-example">
+                    print("Primera línea\nSegunda línea")<br>
+                    # Imprime:<br>
+                    # Primera línea<br>
+                    # Segunda línea
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">if / elif / else</div>
+                <div class="function-desc">
+                    Estructuras condicionales que ejecutan diferentes bloques de código según la condición evaluada. "if" evalúa la primera condición, "elif" (else if) evalúa condiciones alternativas, y "else" se ejecuta si ninguna condición anterior se cumple.
+                </div>
+                <div class="function-example">
+                    if opcion == 1:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print("Opción 1")<br>
+                    elif opcion == 2:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print("Opción 2")<br>
+                    else:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print("Otra opción")
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">Operador ==</div>
+                <div class="function-desc">
+                    Operador de comparación que verifica si dos valores son iguales. Devuelve True si son iguales y False si no lo son. Se usa para comparar la opción seleccionada por el usuario con cada número del menú.
+                </div>
+                <div class="function-example">
+                    if opcion == 1:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print("Es opción 1")<br>
+                    # Verifica si opcion es igual a 1
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">print()</div>
+                <div class="function-desc">
+                    Función integrada de Python que muestra información en la consola. En este código, se usa para informar al usuario qué archivo se está ejecutando antes de llamar a cada función.
+                </div>
+                <div class="function-example">
+                    print("Ejecutando programa...")<br>
+                    # Muestra mensaje en la consola
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">recortes()</div>
+                <div class="function-desc">
+                    Función importada del archivo Coordenadas.py que ejecuta el procesamiento para recortar imágenes. Cuando el usuario selecciona la opción 1, esta función se llama y ejecuta todo el código del archivo Coordenadas.
+                </div>
+                <div class="function-example">
+                    recortes()<br>
+                    # Ejecuta la función recortes del módulo Coordenadas
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">movimiento()</div>
+                <div class="function-desc">
+                    Función importada del archivo Movimiento.py que ejecuta el procesamiento para girar/rotar imágenes. Cuando el usuario selecciona la opción 2, esta función se llama y ejecuta todo el código de rotación de imágenes.
+                </div>
+                <div class="function-example">
+                    movimiento()<br>
+                    # Ejecuta la función movimiento del módulo Movimiento
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">zoom()</div>
+                <div class="function-desc">
+                    Función importada del archivo zoom_img.py que ejecuta el procesamiento para aplicar zoom a imágenes. Cuando el usuario selecciona la opción 3, esta función se llama y ejecuta todo el código de zoom.
+                </div>
+                <div class="function-example">
+                    zoom()<br>
+                    # Ejecuta la función zoom del módulo zoom_img
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">break</div>
+                <div class="function-desc">
+                    Palabra clave de Python que termina inmediatamente el bucle actual. Cuando el usuario selecciona la opción 4 (Salir), el programa sale del bucle while True y finaliza la ejecución. NOTA: En el código actual, break está mal indentado y siempre se ejecutará.
+                </div>
+                <div class="function-example">
+                    if opcion == 4:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print("Salir")<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;break  # Debería estar indentado aquí
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

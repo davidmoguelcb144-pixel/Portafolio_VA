@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom - Satoru Gojo Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 25%, #2d3561 50%, #4a5899 75%, #6b7fc9 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8f4f8;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 191, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(13, 17, 40, 0.85);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 
+                0 0 60px rgba(0, 191, 255, 0.3),
+                0 0 100px rgba(138, 43, 226, 0.2),
+                inset 0 0 80px rgba(0, 191, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(0, 191, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00bfff, #8a2be2, #00bfff);
+            border-radius: 25px;
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(90deg, transparent, #00bfff, #8a2be2, #00bfff, transparent) bottom;
+            background-size: 100% 3px;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #00bfff 0%, #6dd5ff 30%, #a78bfa 70%, #8a2be2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(0, 191, 255, 0.5);
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #6dd5ff;
+            font-size: 1.2rem;
+            font-weight: 300;
+            text-shadow: 0 0 20px rgba(109, 213, 255, 0.5);
+        }
+
+        .code-section {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(10, 14, 39, 0.8) 100%);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 35px;
+            border-left: 5px solid #00bfff;
+            border-right: 5px solid #8a2be2;
+            overflow-x: auto;
+            box-shadow: 
+                inset 0 0 30px rgba(0, 191, 255, 0.1),
+                0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .code-section h2 {
+            background: linear-gradient(90deg, #00bfff, #6dd5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        pre {
+            background: #000000;
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+            line-height: 1.7;
+            border: 1px solid rgba(0, 191, 255, 0.2);
+        }
+
+        code {
+            color: #6dd5ff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre;
+        }
+
+        .keyword {
+            color: #8a2be2;
+            font-weight: 600;
+        }
+
+        .string {
+            color: #00ff88;
+        }
+
+        .function {
+            color: #00bfff;
+            font-weight: 500;
+        }
+
+        .comment {
+            color: #7c8db5;
+            font-style: italic;
+        }
+
+        .number {
+            color: #ff6ec7;
+        }
+
+        .glossary {
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.7) 0%, rgba(42, 47, 97, 0.7) 100%);
+            border-radius: 18px;
+            padding: 35px;
+            border: 2px solid rgba(0, 191, 255, 0.3);
+            box-shadow: 
+                0 0 40px rgba(138, 43, 226, 0.2),
+                inset 0 0 40px rgba(0, 191, 255, 0.05);
+        }
+
+        .glossary h2 {
+            background: linear-gradient(90deg, #00bfff, #a78bfa, #8a2be2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .glossary-item {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 22px;
+            margin-bottom: 18px;
+            border-radius: 12px;
+            border-left: 4px solid #00bfff;
+            border-right: 4px solid #8a2be2;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .glossary-item:hover {
+            transform: translateX(8px) scale(1.02);
+            box-shadow: 
+                0 8px 30px rgba(0, 191, 255, 0.4),
+                0 8px 30px rgba(138, 43, 226, 0.4);
+            border-left-width: 6px;
+            border-right-width: 6px;
+        }
+
+        .function-name {
+            background: linear-gradient(90deg, #00bfff, #6dd5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .function-desc {
+            color: #e8f4f8;
+            line-height: 1.7;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .function-example {
+            background: #000000;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #6dd5ff;
+            font-size: 0.95rem;
+            margin-top: 12px;
+            border: 1px solid rgba(0, 191, 255, 0.3);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .code-section, .glossary {
+                padding: 22px;
+            }
+
+            pre {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .glossary-item {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Zoom</h1>
+            <p class="subtitle">Amplía y reduce imágenes dinámicamente con teclas</p>
+        </div>
+
+        <div class="code-section">
+            <h2>⚡ Código del Ejemplo</h2>
+            <pre><code><span class="keyword">def</span> <span class="function">zoom</span>():
+    <span class="keyword">import</span> cv2
+
+    <span class="keyword">img_original</span>=cv2.<span class="function">imread</span>(<span class="string">'Gatoso.jpg'</span>)
+
+    <span class="keyword">zoom</span>=<span class="number">1.0</span>
+
+    <span class="keyword">while</span> <span class="number">True</span>:
+        <span class="keyword">img</span>=cv2.<span class="function">resize</span>(img_original,<span class="number">None</span>,fx=zoom, fy=zoom)
+        cv2.<span class="function">imshow</span>(<span class="string">'Imagen nueva'</span>, img)
+        <span class="keyword">tecla</span>=cv2.<span class="function">waitKey</span>(<span class="number">0</span>)
+        <span class="keyword">if</span> tecla==<span class="function">ord</span>(<span class="string">'+'</span>):
+            <span class="keyword">zoom</span>=zoom*<span class="number">1.2</span>
+        <span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">'-'</span>):
+            <span class="keyword">zoom</span>=zoom*<span class="number">0.5</span>
+        <span class="keyword">elif</span> tecla == <span class="function">ord</span>(<span class="string">'o'</span>):
+            <span class="keyword">zoom</span>=zoom*zoom
+        <span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">'x'</span>):
+            <span class="keyword">break</span>
+
+
+    cv2.<span class="function">destroyAllWindows</span>()
+
+<span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:
+    <span class="function">zoom</span>()</code></pre>
+        </div>
+
+        <div class="glossary">
+            <h2>👁️ Glosario de Funciones 👁️</h2>
+
+            <div class="glossary-item">
+                <div class="function-name">def zoom():</div>
+                <div class="function-desc">
+                    Define una función llamada "zoom". Las funciones permiten encapsular código reutilizable en un bloque con nombre. Todo el código indentado debajo pertenece a esta función y se ejecutará cuando se llame zoom().
+                </div>
+                <div class="function-example">
+                    def zoom():<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;# código de la función<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print("Ejecutando zoom")
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">import cv2</div>
+                <div class="function-desc">
+                    Importa la librería OpenCV dentro de la función. Aunque normalmente se importa al inicio del archivo, aquí está dentro de la función. OpenCV proporciona herramientas para procesamiento de imágenes.
+                </div>
+                <div class="function-example">
+                    import cv2<br>
+                    # Importa OpenCV para usar sus funciones
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.imread()</div>
+                <div class="function-desc">
+                    Carga una imagen desde un archivo del disco. Lee la imagen especificada por la ruta y la convierte en una matriz numpy. Esta imagen original se guarda para poder redimensionarla múltiples veces sin perder calidad.
+                </div>
+                <div class="function-example">
+                    img_original = cv2.imread('foto.jpg')<br>
+                    # Carga 'foto.jpg' en la variable img_original
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">Variable zoom</div>
+                <div class="function-desc">
+                    Variable que almacena el factor de escala actual de la imagen. Comienza en 1.0 (tamaño original 100%). Valores mayores amplían la imagen, valores menores la reducen. Se modifica según las teclas presionadas.
+                </div>
+                <div class="function-example">
+                    zoom = 1.0  # Tamaño original<br>
+                    zoom = 2.0  # Doble tamaño<br>
+                    zoom = 0.5  # Mitad del tamaño
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">while True:</div>
+                <div class="function-desc">
+                    Crea un bucle infinito que se ejecuta continuamente hasta encontrar una instrucción break. Permite que el programa siga mostrando la imagen redimensionada y esperando nuevas teclas hasta que el usuario presione 'x'.
+                </div>
+                <div class="function-example">
+                    while True:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;# código que se repite<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;if salir:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.resize()</div>
+                <div class="function-desc">
+                    Redimensiona una imagen según los factores especificados. El primer parámetro es la imagen original, el segundo es el tamaño (None para usar factores), fx es el factor de escala horizontal y fy el vertical. En este código, ambos usan el mismo valor zoom.
+                </div>
+                <div class="function-example">
+                    img = cv2.resize(img_original, None, fx=1.5, fy=1.5)<br>
+                    # Amplía la imagen al 150% en ambas dimensiones
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">None</div>
+                <div class="function-desc">
+                    Valor especial en Python que representa la ausencia de valor. En cv2.resize(), usar None como segundo parámetro indica que se usarán los factores fx y fy en lugar de especificar un tamaño fijo en píxeles.
+                </div>
+                <div class="function-example">
+                    cv2.resize(imagen, None, fx=2.0, fy=2.0)<br>
+                    # None indica usar factores en vez de tamaño fijo
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">fx y fy</div>
+                <div class="function-desc">
+                    Parámetros de cv2.resize() que especifican los factores de escala. fx es el factor horizontal (ancho) y fy el factor vertical (alto). En este código ambos son iguales a zoom para mantener las proporciones de la imagen.
+                </div>
+                <div class="function-example">
+                    cv2.resize(img, None, fx=2.0, fy=2.0)<br>
+                    # Duplica el ancho (fx) y alto (fy)
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.imshow()</div>
+                <div class="function-desc">
+                    Muestra una imagen en una ventana emergente. El primer parámetro es el nombre de la ventana y el segundo es la imagen a mostrar. Cada vez que se presiona una tecla, muestra la imagen con el nuevo tamaño aplicado.
+                </div>
+                <div class="function-example">
+                    cv2.imshow('Mi Ventana', imagen)<br>
+                    # Muestra la imagen en una ventana
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.waitKey()</div>
+                <div class="function-desc">
+                    Espera una pulsación de tecla. Con 0 como parámetro, espera indefinidamente hasta que se presione una tecla. Devuelve el código ASCII de la tecla presionada, permitiendo detectar qué tecla fue pulsada.
+                </div>
+                <div class="function-example">
+                    tecla = cv2.waitKey(0)<br>
+                    # Espera indefinidamente hasta que se presione una tecla
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">ord()</div>
+                <div class="function-desc">
+                    Función de Python que devuelve el código ASCII numérico de un carácter. Se usa para comparar la tecla presionada con caracteres específicos ('+', '-', 'o', 'x') y decidir qué acción realizar.
+                </div>
+                <div class="function-example">
+                    if tecla == ord('+'):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print("Presionaste +")<br>
+                    # Compara si la tecla es '+'
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">Operador *</div>
+                <div class="function-desc">
+                    Operador de multiplicación. Se usa para aumentar o disminuir el factor de zoom. Tecla '+' multiplica por 1.2 (aumenta 20%), tecla '-' multiplica por 0.5 (reduce a la mitad), tecla 'o' multiplica zoom por sí mismo (zoom²).
+                </div>
+                <div class="function-example">
+                    zoom = zoom * 1.2  # Aumenta zoom 20%<br>
+                    zoom = zoom * 0.5  # Reduce zoom a la mitad<br>
+                    zoom = zoom * zoom # Eleva zoom al cuadrado
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">break</div>
+                <div class="function-desc">
+                    Palabra clave de Python que termina inmediatamente el bucle actual. Cuando el usuario presiona 'x', el programa sale del bucle while True y continúa con el código después del bucle.
+                </div>
+                <div class="function-example">
+                    if tecla == ord('x'):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;break  # Sale del bucle while
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.destroyAllWindows()</div>
+                <div class="function-desc">
+                    Cierra todas las ventanas de OpenCV que están abiertas. Se ejecuta después de salir del bucle para cerrar correctamente la ventana de la imagen y liberar recursos del sistema.
+                </div>
+                <div class="function-example">
+                    cv2.destroyAllWindows()<br>
+                    # Cierra todas las ventanas de OpenCV
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">if __name__ == '__main__':</div>
+                <div class="function-desc">
+                    Condicional especial de Python que verifica si el archivo está siendo ejecutado directamente (no importado como módulo). Si es True, ejecuta el código indentado debajo. Permite que el archivo funcione tanto independiente como importado.
+                </div>
+                <div class="function-example">
+                    if __name__ == '__main__':<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;zoom()  # Solo ejecuta si es el archivo principal<br>
+                    # Permite importar sin ejecutar automáticamente
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

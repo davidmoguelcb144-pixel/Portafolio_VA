@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Grises - Visión Artificial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #0a0a0a;
+            overflow-x: hidden;
+        }
+
+        @keyframes rgbShift {
+            0% { filter: hue-rotate(0deg); }
+            25% { filter: hue-rotate(90deg); }
+            50% { filter: hue-rotate(180deg); }
+            75% { filter: hue-rotate(270deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        @keyframes glow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(0, 255, 234, 0.4),
+                            0 0 40px rgba(255, 0, 255, 0.3),
+                            0 0 60px rgba(0, 255, 234, 0.2);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(255, 0, 255, 0.5),
+                            0 0 50px rgba(0, 255, 234, 0.4),
+                            0 0 80px rgba(255, 0, 255, 0.3);
+            }
+        }
+
+        @keyframes ledPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #00ffea 0%, #ff00ff 50%, #4b30ca 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.05) 10px,
+                rgba(255, 255, 255, 0.05) 20px
+            );
+            animation: ledPulse 2s linear infinite;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(255, 0, 255, 0.8),
+                         0 0 40px rgba(0, 255, 234, 0.6);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            opacity: 0.95;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00ffea, #ff00ff, #4b30ca, #00ff00);
+            border-radius: 12px;
+            z-index: -1;
+            animation: rgbShift 4s linear infinite;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #00ffea;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 0 0 15px rgba(0, 255, 234, 0.7),
+                         0 0 30px rgba(255, 0, 255, 0.4);
+        }
+
+        .code-block {
+            background: #0d0d0d;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            border: 2px solid rgba(0, 255, 234, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 234, 0.2),
+                        inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block .comment {
+            color: #00ffea;
+            font-style: italic;
+        }
+
+        .code-block .keyword {
+            color: #ff00ff;
+            font-weight: bold;
+        }
+
+        .code-block .function {
+            color: #00ff00;
+        }
+
+        .code-block .string {
+            color: #ffa500;
+        }
+
+        .glossary {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .glossary-item {
+            padding: 1.5rem;
+            background: #0d0d0d;
+            border-radius: 8px;
+            border-left: 4px solid #00ffea;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .glossary-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .glossary-item:hover {
+            transform: translateX(8px);
+            border-left-color: #ff00ff;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3),
+                        0 0 60px rgba(0, 255, 234, 0.2);
+        }
+
+        .glossary-item:hover::before {
+            left: 100%;
+        }
+
+        .glossary-item h3 {
+            font-size: 1.1rem;
+            color: #00ffea;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 10px rgba(0, 255, 234, 0.5);
+        }
+
+        .glossary-item:hover h3 {
+            color: #ff00ff;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+
+        .glossary-item p {
+            color: #b0b0b0;
+            line-height: 1.7;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #00ffea 0%, #ff00ff 50%, #4b30ca 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .back-link:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(0, 255, 234, 0.6),
+                        0 0 60px rgba(255, 0, 255, 0.4);
+        }
+
+        .led-strip {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #00ffea, #ff00ff, #4b30ca, #00ff00, #00ffea);
+            background-size: 200% 100%;
+            animation: rgbShift 3s linear infinite;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .code-block {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="led-strip"></div>
+    
+    <header class="header">
+        <h1>⚫ Escala de Grises</h1>
+        <p class="subtitle">Visión Artificial - Tema 02</p>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <h2 class="section-title">💻 Código de Ejemplo</h2>
+            <div class="code-block">
+<span class="keyword">import</span> cv2
+
+img = cv2.<span class="function">imread</span>(<span class="string">'equipo.jpg'</span>) <span class="comment">#devuelve una matriz NumPy que representa la imagen en formato BGR (Azul, Verde, Rojo).</span>
+
+gris = cv2.<span class="function">cvtColor</span>(img, cv2.COLOR_BGR2GRAY) <span class="comment">#Convierte la imagen de color (BGR) a escala de grises.</span>
+
+cv2.<span class="function">imshow</span>(<span class="string">'Original'</span>, img) <span class="comment">#Muestra una ventana con el nombre "Original" que contiene la imagen a color.</span>
+
+cv2.<span class="function">imshow</span>(<span class="string">'Escala de Grises'</span>, gris) <span class="comment">#Muestra otra ventana con el título "Escala de Grises"</span>
+
+cv2.<span class="function">waitKey</span>(<span class="string">0</span>) <span class="comment">#El parámetro 0 significa "esperar indefinidamente".</span>
+<span class="comment">#Si pusieras un número, por ejemplo 1000, esperaría 1000 milisegundos (1 segundo) antes de cerrar las ventanas automáticamente.</span>
+
+cv2.<span class="function">destroyAllWindows</span>()
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">📚 Glosario de Funciones</h2>
+            <div class="glossary">
+                <div class="glossary-item">
+                    <h3>cv2.imread()</h3>
+                    <p>
+                        Lee una imagen desde un archivo y la carga en memoria como una matriz NumPy. La imagen se carga en formato BGR (Blue, Green, Red), que es el formato predeterminado de OpenCV. Este formato es diferente del RGB convencional.
+                    </p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>cv2.cvtColor()</h3>
+                    <p>
+                        Convierte una imagen de un espacio de color a otro. En este caso, transforma la imagen desde BGR (color) a escala de grises (GRAY). Esta conversión reduce la información de 3 canales (RGB) a un solo canal de intensidad, simplificando el procesamiento.
+                    </p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>cv2.COLOR_BGR2GRAY</h3>
+                    <p>
+                        Es una constante de OpenCV que indica el tipo de conversión de espacio de color a realizar. Específicamente, convierte de BGR (color) a escala de grises. OpenCV usa BGR en lugar de RGB por razones históricas relacionadas con el hardware de captura de video.
+                    </p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>cv2.imshow()</h3>
+                    <p>
+                        Crea y muestra una ventana con la imagen especificada. El primer parámetro es el título de la ventana y el segundo es la imagen a mostrar. Permite visualizar tanto imágenes a color como en escala de grises simultáneamente en ventanas diferentes.
+                    </p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>cv2.waitKey()</h3>
+                    <p>
+                        Espera durante un tiempo determinado (en milisegundos) a que el usuario presione una tecla. Si el parámetro es 0, espera indefinidamente. Con valores como 1000, esperaría 1 segundo antes de continuar. Es esencial para mantener las ventanas abiertas y capturar eventos del teclado.
+                    </p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>cv2.destroyAllWindows()</h3>
+                    <p>
+                        Cierra todas las ventanas creadas por OpenCV y libera los recursos del sistema asociados. Es importante llamar esta función al finalizar para evitar que las ventanas queden abiertas en memoria consumiendo recursos innecesariamente.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <a href="index.html" class="back-link">← Volver al Catálogo</a>
+    </div>
+</body>
+</html>

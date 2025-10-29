@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información de Imagen - Visión Artificial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #e8e6f0;
+            background: linear-gradient(135deg, #1f232f 0%, #27254c 100%);
+            min-height: 100vh;
+        }
+
+        @keyframes cursedEnergy {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(69, 176, 210, 0.4),
+                            0 0 40px rgba(155, 138, 180, 0.3),
+                            inset 0 0 20px rgba(69, 176, 210, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(155, 138, 180, 0.6),
+                            0 0 50px rgba(69, 176, 210, 0.4),
+                            inset 0 0 30px rgba(155, 138, 180, 0.2);
+            }
+        }
+
+        @keyframes domainExpansion {
+            0% { 
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.1;
+            }
+            100% { 
+                transform: scale(1);
+                opacity: 0.3;
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #27254c 0%, #564a94 50%, #45b0d2 100%);
+            color: #f2ecf8;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(69, 176, 210, 0.3);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(69, 176, 210, 0.2) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: domainExpansion 4s ease-in-out infinite;
+        }
+
+        .header::after {
+            content: '呪術';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 15rem;
+            font-weight: 900;
+            color: rgba(155, 138, 180, 0.05);
+            z-index: 0;
+            font-family: serif;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(69, 176, 210, 0.8),
+                         0 4px 8px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+            color: #9b8ab4;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            background: rgba(31, 35, 47, 0.9);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(69, 176, 210, 0.3);
+            animation: cursedEnergy 3s ease-in-out infinite;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #45b0d2;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 0 0 10px rgba(69, 176, 210, 0.6);
+            border-bottom: 2px solid rgba(155, 138, 180, 0.3);
+            padding-bottom: 0.75rem;
+        }
+
+        .code-block {
+            background: #1f232f;
+            color: #e8e6f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            border: 1px solid rgba(86, 74, 148, 0.4);
+            box-shadow: inset 0 0 20px rgba(39, 37, 76, 0.8);
+        }
+
+        .code-block .comment {
+            color: #9b8ab4;
+            font-style: italic;
+        }
+
+        .code-block .keyword {
+            color: #45b0d2;
+            font-weight: bold;
+        }
+
+        .code-block .function {
+            color: #564a94;
+            font-weight: bold;
+        }
+
+        .code-block .string {
+            color: #c7383c;
+        }
+
+        .code-block .method {
+            color: #45b0d2;
+        }
+
+        .glossary {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .glossary-item {
+            padding: 1.5rem;
+            background: rgba(31, 35, 47, 0.6);
+            border-radius: 8px;
+            border-left: 4px solid #564a94;
+            position: relative;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .glossary-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(69, 176, 210, 0.05) 0%, transparent 100%);
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .glossary-item:hover {
+            transform: translateX(10px);
+            border-left-color: #45b0d2;
+            box-shadow: 0 5px 30px rgba(69, 176, 210, 0.3);
+        }
+
+        .glossary-item:hover::before {
+            opacity: 1;
+        }
+
+        .glossary-item h3 {
+            font-size: 1.1rem;
+            color: #45b0d2;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 10px rgba(69, 176, 210, 0.4);
+        }
+
+        .glossary-item:hover h3 {
+            color: #9b8ab4;
+        }
+
+        .glossary-item p {
+            color: #c2c0cc;
+            line-height: 1.7;
+        }
+
+        .technique-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #564a94 0%, #45b0d2 100%);
+            color: #f2ecf8;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #564a94 0%, #45b0d2 100%);
+            color: #f2ecf8;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(69, 176, 210, 0.3);
+        }
+
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(69, 176, 210, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .code-block {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .header::after {
+                font-size: 8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>ℹ️ Información de Imagen</h1>
+        <p class="subtitle">Visión Artificial - Tema 03</p>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <h2 class="section-title">💻 Código de Ejemplo</h2>
+            <div class="code-block">
+<span class="keyword">import</span> cv2
+
+img = cv2.<span class="function">imread</span>(<span class="string">'gato.jpg'</span>)
+
+<span class="keyword">print</span>(<span class="string">"Dimensiones:"</span>, img.<span class="method">shape</span>) <span class="comment">#Dimensiones de la imagen. El formato es: (alto, ancho, canales)</span>
+
+<span class="keyword">print</span>(<span class="string">"Alto:"</span>, img.<span class="method">shape</span>[<span class="string">0</span>]) <span class="comment">#Representa el alto (número de filas) o la cantidad de píxeles verticales.</span>
+
+<span class="keyword">print</span>(<span class="string">"Ancho:"</span>, img.<span class="method">shape</span>[<span class="string">1</span>]) <span class="comment">#Indica el ancho (número de columnas) o la cantidad de píxeles horizontales.</span>
+
+<span class="keyword">print</span>(<span class="string">"Canales de color:"</span>, img.<span class="method">shape</span>[<span class="string">2</span>])
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">📚 Glosario de Funciones y Propiedades</h2>
+            <div class="glossary">
+                <div class="glossary-item">
+                    <h3>cv2.imread()</h3>
+                    <p>
+                        Lee y carga una imagen desde un archivo en el disco. La imagen se almacena como una matriz NumPy tridimensional en formato BGR (Blue, Green, Red). Esta función es el punto de partida para cualquier operación de procesamiento de imágenes.
+                    </p>
+                    <span class="technique-badge">Técnica Base</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>img.shape</h3>
+                    <p>
+                        Propiedad de NumPy que retorna una tupla con las dimensiones de la matriz de la imagen. Para imágenes a color devuelve (alto, ancho, canales), mientras que para imágenes en escala de grises devuelve solo (alto, ancho). Es fundamental para conocer el tamaño de la imagen.
+                    </p>
+                    <span class="technique-badge">Atributo Principal</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>img.shape[0] - Alto</h3>
+                    <p>
+                        Accede al primer elemento de la tupla shape, que representa el alto de la imagen o número de filas. Este valor indica cuántos píxeles tiene la imagen verticalmente. Es equivalente al número total de líneas horizontales que componen la imagen.
+                    </p>
+                    <span class="technique-badge">Dimensión Vertical</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>img.shape[1] - Ancho</h3>
+                    <p>
+                        Accede al segundo elemento de la tupla shape, representando el ancho de la imagen o número de columnas. Este valor indica cuántos píxeles tiene la imagen horizontalmente. Es el número de píxeles en cada línea horizontal de la imagen.
+                    </p>
+                    <span class="technique-badge">Dimensión Horizontal</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>img.shape[2] - Canales</h3>
+                    <p>
+                        Accede al tercer elemento de shape, que indica el número de canales de color. Para imágenes BGR estándar este valor es 3 (Azul, Verde, Rojo). Para imágenes en escala de grises, este índice no existe ya que solo tienen un canal de intensidad.
+                    </p>
+                    <span class="technique-badge">Profundidad de Color</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>print()</h3>
+                    <p>
+                        Función integrada de Python que imprime valores en la consola. Permite visualizar información textual como las dimensiones de la imagen. Es esencial para debugging y para comprender las propiedades de las estructuras de datos con las que trabajamos.
+                    </p>
+                    <span class="technique-badge">Función Output</span>
+                </div>
+            </div>
+        </section>
+
+        <a href="index.html" class="back-link">← Volver al Catálogo</a>
+    </div>
+</body>
+</html>

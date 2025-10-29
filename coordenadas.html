@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coordenadas - Lucid Dreams Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8e8e8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(22, 33, 62, 0.8);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(232, 232, 232, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e94560;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #e94560;
+            text-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #a8dadc;
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .code-section {
+            background: #0f1419;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 4px solid #e94560;
+            overflow-x: auto;
+        }
+
+        .code-section h2 {
+            color: #a8dadc;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        pre {
+            background: #000000;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+
+        code {
+            color: #7dd3fc;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre;
+        }
+
+        .keyword {
+            color: #e94560;
+        }
+
+        .string {
+            color: #4ade80;
+        }
+
+        .function {
+            color: #fbbf24;
+        }
+
+        .comment {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .number {
+            color: #c084fc;
+        }
+
+        .glossary {
+            background: rgba(15, 52, 96, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+
+        .glossary h2 {
+            color: #e94560;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .glossary-item {
+            background: rgba(26, 26, 46, 0.8);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #a8dadc;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glossary-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.3);
+        }
+
+        .function-name {
+            color: #fbbf24;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .function-desc {
+            color: #e8e8e8;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .function-example {
+            background: #000000;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            color: #7dd3fc;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .code-section, .glossary {
+                padding: 20px;
+            }
+
+            pre {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .glossary-item {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📐 Coordenadas</h1>
+            <p class="subtitle">Recorte de imágenes con OpenCV</p>
+        </div>
+
+        <div class="code-section">
+            <h2>📝 Código del Ejemplo</h2>
+            <pre><code><span class="keyword">import</span> cv2
+<span class="comment">#importar libreria opencv</span>
+
+<span class="comment">#cargar imagen</span>
+<span class="keyword">gato</span>=cv2.<span class="function">imread</span>(<span class="string">'Gatoso.jpg'</span>)
+
+<span class="keyword">while</span> <span class="number">True</span>:
+    Recorte = gato[<span class="number">10</span>:<span class="number">110</span>, <span class="number">70</span>:<span class="number">160</span>]  <span class="comment"># Alto y ancho</span>
+
+    cv2.<span class="function">imshow</span>(<span class="string">'Gatoso'</span>, gato)
+    cv2.<span class="function">imshow</span>(<span class="string">'Recorte'</span>,Recorte)
+    cv2.<span class="function">imshow</span>(<span class="string">'Recorte'</span>,Recorte)
+
+    tecla=cv2.<span class="function">waitKey</span>(<span class="number">0</span>)
+    <span class="keyword">if</span> tecla==<span class="function">ord</span>(<span class="string">'x'</span>):
+        cv2.<span class="function">destroyAllWindows</span>()
+        <span class="keyword">break</span>
+    <span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">'o'</span>):
+        cv2.<span class="function">imshow</span>(<span class="string">'Imagen original'</span>,gato)
+    <span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">'y'</span>):
+        cv2.<span class="function">imshow</span>(<span class="string">'Imagen Recortada'</span>,Recorte)</code></pre>
+        </div>
+
+        <div class="glossary">
+            <h2>📚 Glosario de Funciones</h2>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.imread()</div>
+                <div class="function-desc">
+                    Carga una imagen desde un archivo. Lee la imagen especificada por la ruta y la devuelve como una matriz numpy. Si la imagen no se puede leer, devuelve None.
+                </div>
+                <div class="function-example">
+                    imagen = cv2.imread('foto.jpg')<br>
+                    # Carga 'foto.jpg' en la variable imagen
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">Slicing [y1:y2, x1:x2]</div>
+                <div class="function-desc">
+                    Recorta una región rectangular de la imagen usando coordenadas. El primer rango [10:110] representa las filas (altura) y el segundo [70:160] las columnas (ancho). Extrae un rectángulo de 100x90 píxeles.
+                </div>
+                <div class="function-example">
+                    recorte = imagen[10:110, 70:160]<br>
+                    # Desde fila 10 hasta 110, columna 70 hasta 160
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.imshow()</div>
+                <div class="function-desc">
+                    Muestra una imagen en una ventana. El primer parámetro es el nombre de la ventana y el segundo es la imagen a mostrar. La ventana se ajusta automáticamente al tamaño de la imagen.
+                </div>
+                <div class="function-example">
+                    cv2.imshow('Mi Ventana', imagen)<br>
+                    # Muestra la imagen en una ventana llamada 'Mi Ventana'
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.waitKey()</div>
+                <div class="function-desc">
+                    Espera una pulsación de tecla durante un tiempo especificado en milisegundos. Con 0 como parámetro, espera indefinidamente hasta que se presione una tecla. Devuelve el código ASCII de la tecla presionada.
+                </div>
+                <div class="function-example">
+                    tecla = cv2.waitKey(0)<br>
+                    # Espera hasta que el usuario presione una tecla
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">ord()</div>
+                <div class="function-desc">
+                    Función de Python que devuelve el código ASCII de un carácter. Se usa para comparar la tecla presionada con caracteres específicos ('x', 'o', 'y' en este caso).
+                </div>
+                <div class="function-example">
+                    if tecla == ord('x'):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print("Se presionó X")<br>
+                    # Compara si la tecla es 'x'
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.destroyAllWindows()</div>
+                <div class="function-desc">
+                    Cierra todas las ventanas de OpenCV que están abiertas. Es importante llamar a esta función antes de terminar el programa para liberar recursos y cerrar ventanas correctamente.
+                </div>
+                <div class="function-example">
+                    cv2.destroyAllWindows()<br>
+                    # Cierra todas las ventanas abiertas
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

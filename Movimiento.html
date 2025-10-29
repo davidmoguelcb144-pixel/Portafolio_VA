@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotación de Imagen - Satoru Gojo Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 25%, #2d3561 50%, #4a5899 75%, #6b7fc9 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e8f4f8;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 191, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(13, 17, 40, 0.85);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 
+                0 0 60px rgba(0, 191, 255, 0.3),
+                0 0 100px rgba(138, 43, 226, 0.2),
+                inset 0 0 80px rgba(0, 191, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(0, 191, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00bfff, #8a2be2, #00bfff);
+            border-radius: 25px;
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(90deg, transparent, #00bfff, #8a2be2, #00bfff, transparent) bottom;
+            background-size: 100% 3px;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #00bfff 0%, #6dd5ff 30%, #a78bfa 70%, #8a2be2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(0, 191, 255, 0.5);
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #6dd5ff;
+            font-size: 1.2rem;
+            font-weight: 300;
+            text-shadow: 0 0 20px rgba(109, 213, 255, 0.5);
+        }
+
+        .code-section {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(10, 14, 39, 0.8) 100%);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 35px;
+            border-left: 5px solid #00bfff;
+            border-right: 5px solid #8a2be2;
+            overflow-x: auto;
+            box-shadow: 
+                inset 0 0 30px rgba(0, 191, 255, 0.1),
+                0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .code-section h2 {
+            background: linear-gradient(90deg, #00bfff, #6dd5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        pre {
+            background: #000000;
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+            line-height: 1.7;
+            border: 1px solid rgba(0, 191, 255, 0.2);
+        }
+
+        code {
+            color: #6dd5ff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            white-space: pre;
+        }
+
+        .keyword {
+            color: #8a2be2;
+            font-weight: 600;
+        }
+
+        .string {
+            color: #00ff88;
+        }
+
+        .function {
+            color: #00bfff;
+            font-weight: 500;
+        }
+
+        .comment {
+            color: #7c8db5;
+            font-style: italic;
+        }
+
+        .number {
+            color: #ff6ec7;
+        }
+
+        .glossary {
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.7) 0%, rgba(42, 47, 97, 0.7) 100%);
+            border-radius: 18px;
+            padding: 35px;
+            border: 2px solid rgba(0, 191, 255, 0.3);
+            box-shadow: 
+                0 0 40px rgba(138, 43, 226, 0.2),
+                inset 0 0 40px rgba(0, 191, 255, 0.05);
+        }
+
+        .glossary h2 {
+            background: linear-gradient(90deg, #00bfff, #a78bfa, #8a2be2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .glossary-item {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 22px;
+            margin-bottom: 18px;
+            border-radius: 12px;
+            border-left: 4px solid #00bfff;
+            border-right: 4px solid #8a2be2;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .glossary-item:hover {
+            transform: translateX(8px) scale(1.02);
+            box-shadow: 
+                0 8px 30px rgba(0, 191, 255, 0.4),
+                0 8px 30px rgba(138, 43, 226, 0.4);
+            border-left-width: 6px;
+            border-right-width: 6px;
+        }
+
+        .function-name {
+            background: linear-gradient(90deg, #00bfff, #6dd5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .function-desc {
+            color: #e8f4f8;
+            line-height: 1.7;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .function-example {
+            background: #000000;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #6dd5ff;
+            font-size: 0.95rem;
+            margin-top: 12px;
+            border: 1px solid rgba(0, 191, 255, 0.3);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .code-section, .glossary {
+                padding: 22px;
+            }
+
+            pre {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .glossary-item {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔄 Rotación de Imagen</h1>
+            <p class="subtitle">Controla la rotación de imágenes con teclas</p>
+        </div>
+
+        <div class="code-section">
+            <h2>⚡ Código del Ejemplo</h2>
+            <pre><code><span class="comment">#Importar libraría opencv</span>
+<span class="keyword">import</span> cv2
+<span class="comment">#Guardamos la imagen en una variable</span>
+<span class="keyword">imagen</span>=cv2.<span class="function">imread</span>(<span class="string">'KON.jpg'</span>)
+<span class="keyword">imgoriginal</span>=imagen.<span class="function">copy</span>()
+
+<span class="keyword">while</span> <span class="number">True</span>:
+    cv2.<span class="function">imshow</span>(<span class="string">'Imagen original'</span>,imagen)
+    <span class="keyword">tecla</span>=cv2.<span class="function">waitKey</span>(<span class="number">0</span>)
+
+    <span class="keyword">if</span> tecla==<span class="function">ord</span>(<span class="string">'d'</span>):
+        <span class="keyword">imagen</span>=cv2.<span class="function">rotate</span>(imagen,cv2.ROTATE_90_CLOCKWISE)
+        <span class="function">print</span>(<span class="string">"Se presiono la tecla"</span>,tecla)
+    <span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">'a'</span>):
+        <span class="keyword">imagen</span>=cv2.<span class="function">rotate</span>(imagen,cv2.ROTATE_90_COUNTERCLOCKWISE)
+        <span class="function">print</span>(<span class="string">"Se presiono la tecla"</span>,tecla)
+    <span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">'w'</span>):
+        <span class="keyword">imagen</span>=cv2.<span class="function">rotate</span>(imagen,cv2.ROTATE_180)
+        <span class="function">print</span>(<span class="string">"Se presiono la tecla"</span>,tecla)
+    <span class="keyword">elif</span> tecla==<span class="function">ord</span>(<span class="string">'s'</span>):
+        <span class="function">print</span>(<span class="string">"Se presiono la tecla"</span>,tecla)
+        <span class="keyword">break</span></code></pre>
+        </div>
+
+        <div class="glossary">
+            <h2>👁️ Glosario de Funciones 👁️</h2>
+
+            <div class="glossary-item">
+                <div class="function-name">import cv2</div>
+                <div class="function-desc">
+                    Importa la librería OpenCV (Open Source Computer Vision Library), una biblioteca especializada en procesamiento de imágenes y visión por computadora. Proporciona funciones para leer, manipular y mostrar imágenes.
+                </div>
+                <div class="function-example">
+                    import cv2<br>
+                    # Importa todas las funciones de OpenCV
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.imread()</div>
+                <div class="function-desc">
+                    Carga una imagen desde un archivo del disco. Lee la imagen especificada por la ruta y la convierte en una matriz numpy que puede ser procesada. Si no encuentra el archivo, devuelve None.
+                </div>
+                <div class="function-example">
+                    imagen = cv2.imread('foto.jpg')<br>
+                    # Carga 'foto.jpg' en la variable imagen
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">.copy()</div>
+                <div class="function-desc">
+                    Crea una copia independiente de la imagen. Esto es importante para preservar la imagen original sin modificaciones, permitiendo restaurarla o compararla después de aplicar transformaciones.
+                </div>
+                <div class="function-example">
+                    imagen_backup = imagen.copy()<br>
+                    # Guarda una copia de seguridad de la imagen
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">while True:</div>
+                <div class="function-desc">
+                    Crea un bucle infinito que se ejecuta continuamente hasta que se encuentre una instrucción break. Útil para programas interactivos que esperan entrada del usuario de forma repetitiva.
+                </div>
+                <div class="function-example">
+                    while True:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;# código que se repite infinitamente<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;if condicion:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break  # sale del bucle
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.imshow()</div>
+                <div class="function-desc">
+                    Muestra una imagen en una ventana emergente. El primer parámetro es el nombre de la ventana y el segundo es la imagen a mostrar. La ventana permanece abierta hasta que se cierre o se llame a destroyAllWindows().
+                </div>
+                <div class="function-example">
+                    cv2.imshow('Mi Ventana', imagen)<br>
+                    # Muestra la imagen en una ventana llamada 'Mi Ventana'
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.waitKey()</div>
+                <div class="function-desc">
+                    Espera una pulsación de tecla durante un tiempo especificado en milisegundos. Con 0 como parámetro, espera indefinidamente. Devuelve el código ASCII de la tecla presionada, permitiendo detectar qué tecla fue presionada.
+                </div>
+                <div class="function-example">
+                    tecla = cv2.waitKey(0)<br>
+                    # Espera indefinidamente hasta que se presione una tecla
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">ord()</div>
+                <div class="function-desc">
+                    Función de Python que devuelve el código ASCII numérico de un carácter. Se usa para comparar la tecla presionada con caracteres específicos ('d', 'a', 'w', 's').
+                </div>
+                <div class="function-example">
+                    if tecla == ord('d'):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print("Presionaste D")<br>
+                    # Compara si la tecla presionada es 'd'
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.rotate()</div>
+                <div class="function-desc">
+                    Rota una imagen según el ángulo especificado. Acepta constantes predefinidas: ROTATE_90_CLOCKWISE (90° horario), ROTATE_90_COUNTERCLOCKWISE (90° antihorario) y ROTATE_180 (180°).
+                </div>
+                <div class="function-example">
+                    rotada = cv2.rotate(imagen, cv2.ROTATE_90_CLOCKWISE)<br>
+                    # Rota la imagen 90 grados a la derecha
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.ROTATE_90_CLOCKWISE</div>
+                <div class="function-desc">
+                    Constante de OpenCV que indica rotación de 90 grados en sentido horario (hacia la derecha). Usada como parámetro en cv2.rotate() cuando se presiona la tecla 'D'.
+                </div>
+                <div class="function-example">
+                    # Rota 90° a la derecha<br>
+                    imagen = cv2.rotate(imagen, cv2.ROTATE_90_CLOCKWISE)
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.ROTATE_90_COUNTERCLOCKWISE</div>
+                <div class="function-desc">
+                    Constante de OpenCV que indica rotación de 90 grados en sentido antihorario (hacia la izquierda). Usada como parámetro en cv2.rotate() cuando se presiona la tecla 'A'.
+                </div>
+                <div class="function-example">
+                    # Rota 90° a la izquierda<br>
+                    imagen = cv2.rotate(imagen, cv2.ROTATE_90_COUNTERCLOCKWISE)
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.ROTATE_180</div>
+                <div class="function-desc">
+                    Constante de OpenCV que indica rotación de 180 grados (volteo completo). Usada como parámetro en cv2.rotate() cuando se presiona la tecla 'W'.
+                </div>
+                <div class="function-example">
+                    # Rota 180° (volteo completo)<br>
+                    imagen = cv2.rotate(imagen, cv2.ROTATE_180)
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">print()</div>
+                <div class="function-desc">
+                    Función integrada de Python que muestra información en la consola. Útil para depuración y confirmar qué tecla fue presionada por el usuario.
+                </div>
+                <div class="function-example">
+                    print("Se presiono la tecla", tecla)<br>
+                    # Muestra mensaje con el código de la tecla
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">break</div>
+                <div class="function-desc">
+                    Palabra clave de Python que termina inmediatamente el bucle actual. En este código, cuando se presiona 'S', el programa sale del bucle while y finaliza la ejecución.
+                </div>
+                <div class="function-example">
+                    if tecla == ord('s'):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;break  # Sale del bucle while True
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

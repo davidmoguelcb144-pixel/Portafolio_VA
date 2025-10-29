@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abrir Imagen con Python - Visión Artificial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #0a0a0a;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #00ffea 0%, #4b30ca 50%, #501ed0 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 255, 234, 0.3);
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(0, 255, 234, 0.5);
+        }
+
+        .header .subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 255, 234, 0.1);
+            border: 1px solid rgba(0, 255, 234, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #00ffea;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 0 0 10px rgba(0, 255, 234, 0.5);
+        }
+
+        .code-block {
+            background: #0d0d0d;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            border: 1px solid rgba(75, 48, 202, 0.3);
+            box-shadow: 0 0 15px rgba(75, 48, 202, 0.2);
+        }
+
+        .code-block .comment {
+            color: #00ffea;
+        }
+
+        .code-block .keyword {
+            color: #ff00ff;
+        }
+
+        .code-block .function {
+            color: #00ffea;
+        }
+
+        .code-block .string {
+            color: #ffa500;
+        }
+
+        .glossary {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .glossary-item {
+            padding: 1.25rem;
+            background: #0d0d0d;
+            border-radius: 6px;
+            border-left: 4px solid #00ffea;
+            box-shadow: 0 0 15px rgba(0, 255, 234, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glossary-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 0 25px rgba(0, 255, 234, 0.3);
+        }
+
+        .glossary-item h3 {
+            font-size: 1.1rem;
+            color: #00ffea;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 10px rgba(0, 255, 234, 0.4);
+        }
+
+        .glossary-item p {
+            color: #b0b0b0;
+            line-height: 1.7;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #00ffea 0%, #4b30ca 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 234, 0.3);
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 255, 234, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .code-block {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>📂 Abrir Imagen con Python</h1>
+        <p class="subtitle">Visión Artificial - Tema 01</p>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <h2 class="section-title">💻 Código de Ejemplo</h2>
+            <pre>
+                <code>
+
+                    
+import cv2 #importa la librería cv
+
+import numpy as np
+
+#Importa numpy para crear y manipular matrices
+
+#matrices de pixeles
+
+#Creo una matriz
+
+#img=np.zeros((300,300,3),np.uint8)
+
+img=np.full((300,300),200,dtype=np.uint8)
+
+#np.zeros((300,300)) crea una matriz de 300 filas y 300 columnas
+
+#llena de ceros
+
+#np.vint8 define que cada valor es entero de 8 bits(0-255)
+
+#adecuado para escala de grises
+
+#creamos la pantalla
+
+cv2.imshow("Imagen fondo negro",img)
+
+#Muestra la imagen en la ventana
+
+#imagen de fondo negro es el nombre de la ventana
+
+cv2.waitKey(0)
+
+#espera que el usuario presione cualquier tecla para cerrar la ventana
+
+cv2.destroyAllWindows()
+                    
+                </code>
+            </pre>
+
+
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">📚 Glosario de Funciones</h2>
+            <div class="glossary">
+                <div class="glossary-item">
+                    <h3>cv2.imread()</h3>
+                    <p>
+                        Lee una imagen desde un archivo y la carga en memoria. Recibe como parámetro la ruta del archivo de imagen y retorna un array NumPy que representa la imagen en formato BGR (Blue, Green, Red).
+                    </p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>cv2.imshow()</h3>
+                    <p>
+                        Muestra una imagen en una ventana. Recibe dos parámetros: el nombre de la ventana (string) y la imagen a mostrar (array NumPy). La ventana se crea automáticamente con el nombre especificado.
+                    </p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>cv2.waitKey()</h3>
+                    <p>
+                        Espera una cantidad específica de tiempo (en milisegundos) para que el usuario presione una tecla. Si el parámetro es 0, espera indefinidamente hasta que se presione cualquier tecla. Retorna el código ASCII de la tecla presionada.
+                    </p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>cv2.destroyAllWindows()</h3>
+                    <p>
+                        Cierra todas las ventanas abiertas por OpenCV y libera los recursos asociados. Es una buena práctica llamar esta función al finalizar para evitar que las ventanas queden abiertas en segundo plano.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <a href="index.html" class="back-link">← Volver al Catálogo</a>
+    </div>
+</body>
+</html>

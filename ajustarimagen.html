@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajustar Tamaño - Visión Artificial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #e8d9f0;
+            background: linear-gradient(135deg, #1a1625 0%, #2d1b3d 50%, #1a1625 100%);
+            min-height: 100vh;
+        }
+
+        @keyframes dreamyFloat {
+            0%, 100% {
+                transform: translateY(0px);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-20px);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes migrainePulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(186, 135, 255, 0.4),
+                            0 0 60px rgba(255, 107, 237, 0.3),
+                            inset 0 0 30px rgba(186, 135, 255, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(255, 107, 237, 0.6),
+                            0 0 80px rgba(186, 135, 255, 0.4),
+                            inset 0 0 50px rgba(255, 107, 237, 0.2);
+            }
+        }
+
+        @keyframes lucidDream {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .header {
+            background: linear-gradient(-45deg, #2d1b3d, #4a2c5e, #ba87ff, #ff6bed);
+            background-size: 400% 400%;
+            animation: lucidDream 15s ease infinite;
+            color: #ffffff;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 50px rgba(186, 135, 255, 0.4);
+        }
+
+        .header::before {
+            content: '♪';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.1;
+            top: 10%;
+            left: 10%;
+            animation: dreamyFloat 6s ease-in-out infinite;
+        }
+
+        .header::after {
+            content: '♫';
+            position: absolute;
+            font-size: 6rem;
+            opacity: 0.1;
+            bottom: 15%;
+            right: 15%;
+            animation: dreamyFloat 8s ease-in-out infinite 2s;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 30px rgba(255, 107, 237, 0.8),
+                         0 4px 12px rgba(0, 0, 0, 0.6);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+            color: #e8d9f0;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            background: rgba(45, 27, 61, 0.8);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(186, 135, 255, 0.3);
+            animation: migrainePulse 4s ease-in-out infinite;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 237, 0.1) 0%, transparent 70%);
+            animation: dreamyFloat 10s ease-in-out infinite;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #ba87ff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 0 0 15px rgba(186, 135, 255, 0.8);
+            border-bottom: 2px solid rgba(255, 107, 237, 0.3);
+            padding-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .code-block {
+            background: #1a1625;
+            color: #e8d9f0;
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            border: 1px solid rgba(186, 135, 255, 0.3);
+            box-shadow: inset 0 0 30px rgba(45, 27, 61, 0.9);
+            position: relative;
+            z-index: 1;
+        }
+
+        .code-block .comment {
+            color: #ba87ff;
+            font-style: italic;
+        }
+
+        .code-block .keyword {
+            color: #ff6bed;
+            font-weight: bold;
+        }
+
+        .code-block .function {
+            color: #a78bfa;
+        }
+
+        .code-block .string {
+            color: #fbbf24;
+        }
+
+        .code-block .method {
+            color: #ba87ff;
+        }
+
+        .code-block .multiline-comment {
+            color: #8b7ba8;
+            font-style: italic;
+        }
+
+        .glossary {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .glossary-item {
+            padding: 1.5rem;
+            background: rgba(26, 22, 37, 0.7);
+            border-radius: 12px;
+            border-left: 4px solid #ba87ff;
+            position: relative;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(5px);
+            z-index: 1;
+        }
+
+        .glossary-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(186, 135, 255, 0.05) 0%, rgba(255, 107, 237, 0.05) 100%);
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .glossary-item:hover {
+            transform: translateX(12px) scale(1.02);
+            border-left-color: #ff6bed;
+            box-shadow: 0 8px 40px rgba(255, 107, 237, 0.4);
+        }
+
+        .glossary-item:hover::before {
+            opacity: 1;
+        }
+
+        .glossary-item h3 {
+            font-size: 1.1rem;
+            color: #ba87ff;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 10px rgba(186, 135, 255, 0.5);
+        }
+
+        .glossary-item:hover h3 {
+            color: #ff6bed;
+            text-shadow: 0 0 15px rgba(255, 107, 237, 0.7);
+        }
+
+        .glossary-item p {
+            color: #c8b8d8;
+            line-height: 1.7;
+        }
+
+        .param-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ba87ff 0%, #ff6bed 100%);
+            color: #ffffff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            margin-right: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(186, 135, 255, 0.3);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #ba87ff 0%, #ff6bed 100%);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(186, 135, 255, 0.4);
+        }
+
+        .back-link:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(255, 107, 237, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .code-block {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>📐 Ajustar Tamaño</h1>
+        <p class="subtitle">Visión Artificial - Tema 04</p>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <h2 class="section-title">💻 Código de Ejemplo</h2>
+            <div class="code-block">
+<span class="keyword">import</span> cv2
+
+<span class="comment"># Cargar la imagen</span>
+img = cv2.<span class="function">imread</span>(<span class="string">'equipo.jpg'</span>)
+
+<span class="comment"># Redimensionar la imagen a un tamaño fijo</span>
+img_pequena = cv2.<span class="function">resize</span>(img, (<span class="string">300</span>, <span class="string">200</span>))
+
+<span class="comment"># También puedes escalar proporcionalmente</span>
+img_grande = cv2.<span class="function">resize</span>(img_pequena, <span class="keyword">None</span>, fx=<span class="string">2</span>, fy=<span class="string">2</span>, interpolation=cv2.INTER_AREA)
+
+<span class="multiline-comment">"""cv2.resize(): cambia el tamaño de la imagen.
+img: imagen original.
+None: no se especifican dimensiones exactas (usará los factores de escala).
+fx=1.5: multiplica el ancho por 1.5 (50 % más ancho).
+fy=1.5: multiplica el alto por 1.5 (50 % más alto).
+Resultado: img_grande es la misma imagen, pero 1.5 veces más grande en ambas dimensiones."""</span>
+
+<span class="comment"># Mostrar las tres imágenes</span>
+cv2.<span class="function">imshow</span>(<span class="string">'Original'</span>, img)
+cv2.<span class="function">imshow</span>(<span class="string">'Más pequeña'</span>, img_pequena)
+cv2.<span class="function">imshow</span>(<span class="string">'Más grande'</span>, img_grande)
+
+cv2.<span class="function">waitKey</span>(<span class="string">0</span>)
+cv2.<span class="function">destroyAllWindows</span>()
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">📚 Glosario de Funciones y Parámetros</h2>
+            <div class="glossary">
+                <div class="glossary-item">
+                    <h3>cv2.imread()</h3>
+                    <p>
+                        Carga una imagen desde un archivo en el disco duro y la convierte en una matriz NumPy. Esta es la función fundamental para comenzar cualquier operación de procesamiento de imágenes con OpenCV.
+                    </p>
+                    <span class="param-badge">Función Base</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>cv2.resize()</h3>
+                    <p>
+                        Cambia el tamaño de una imagen a nuevas dimensiones específicas o mediante factores de escala. Es una de las operaciones más comunes en visión artificial, útil para normalizar tamaños, reducir peso de procesamiento o preparar datos para modelos de machine learning.
+                    </p>
+                    <span class="param-badge">Redimensionamiento</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>Parámetro: (ancho, alto)</h3>
+                    <p>
+                        Tupla que especifica las dimensiones exactas de la imagen resultante. El primer valor es el ancho en píxeles y el segundo es el alto. Por ejemplo, (300, 200) crea una imagen de 300 píxeles de ancho por 200 de alto, sin importar el tamaño original.
+                    </p>
+                    <span class="param-badge">Dimensiones Fijas</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>Parámetro: None</h3>
+                    <p>
+                        Cuando se usa None como segundo argumento en resize(), indica que no se especificarán dimensiones exactas, sino que se utilizarán los factores de escala fx y fy para calcular el nuevo tamaño proporcionalmente al original.
+                    </p>
+                    <span class="param-badge">Escala Proporcional</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>Parámetro: fx (Factor X)</h3>
+                    <p>
+                        Factor de escala para el ancho de la imagen. Un valor de 2 duplica el ancho, 0.5 lo reduce a la mitad, 1.5 lo aumenta en un 50%. Se usa junto con None en el parámetro de dimensiones para escalar proporcionalmente.
+                    </p>
+                    <span class="param-badge">Escala Horizontal</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>Parámetro: fy (Factor Y)</h3>
+                    <p>
+                        Factor de escala para el alto de la imagen. Funciona igual que fx pero afecta la dimensión vertical. Un valor de 2 duplica la altura. Cuando fx y fy son iguales, la imagen mantiene su proporción original.
+                    </p>
+                    <span class="param-badge">Escala Vertical</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>Parámetro: interpolation</h3>
+                    <p>
+                        Método de interpolación usado para calcular los nuevos valores de píxeles al redimensionar. cv2.INTER_AREA es ideal para reducir tamaño (suaviza la imagen), mientras que cv2.INTER_LINEAR es bueno para ampliar. Otros métodos incluyen INTER_CUBIC (más lento pero mejor calidad) e INTER_NEAREST (más rápido pero menor calidad).
+                    </p>
+                    <span class="param-badge">Método de Cálculo</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>cv2.imshow()</h3>
+                    <p>
+                        Muestra una imagen en una ventana con el título especificado. Permite visualizar múltiples versiones de la imagen simultáneamente en ventanas separadas, ideal para comparar el original con las versiones redimensionadas.
+                    </p>
+                    <span class="param-badge">Visualización</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>cv2.waitKey()</h3>
+                    <p>
+                        Pausa la ejecución y espera un tiempo determinado (en milisegundos) o indefinidamente (con 0) hasta que el usuario presione una tecla. Es esencial para mantener las ventanas abiertas y permitir al usuario ver las imágenes.
+                    </p>
+                    <span class="param-badge">Control de Espera</span>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>cv2.destroyAllWindows()</h3>
+                    <p>
+                        Cierra todas las ventanas de visualización creadas por OpenCV y libera los recursos del sistema. Importante para evitar que las ventanas permanezcan abiertas consumiendo memoria después de finalizar el programa.
+                    </p>
+                    <span class="param-badge">Limpieza de Recursos</span>
+                </div>
+            </div>
+        </section>
+
+        <a href="index.html" class="back-link">← Volver al Catálogo</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contar Palabras con Python</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            background: linear-gradient(135deg, #1a1625 0%, #2d1b3d 50%, #1a1625 100%);
+            overflow-x: hidden;
+        }
+
+        /* Efectos de luces LED estilo Lucid Dreams */
+        @keyframes dreamGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(168, 85, 247, 0.4),
+                            0 0 40px rgba(168, 85, 247, 0.2),
+                            0 0 60px rgba(59, 130, 246, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(59, 130, 246, 0.4),
+                            0 0 60px rgba(59, 130, 246, 0.2),
+                            0 0 90px rgba(168, 85, 247, 0.2);
+            }
+        }
+
+        @keyframes neonDream {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(168, 85, 247, 0.8),
+                             0 0 20px rgba(168, 85, 247, 0.6),
+                             0 0 30px rgba(168, 85, 247, 0.4),
+                             0 0 40px rgba(59, 130, 246, 0.2);
+            }
+            50% {
+                text-shadow: 0 0 15px rgba(59, 130, 246, 0.8),
+                             0 0 30px rgba(59, 130, 246, 0.6),
+                             0 0 45px rgba(59, 130, 246, 0.4),
+                             0 0 60px rgba(168, 85, 247, 0.2);
+            }
+        }
+
+        @keyframes dreamShift {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        @keyframes floatDream {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes stars {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        /* Header estilo Lucid Dreams */
+        .header {
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #1a1625 0%, #2d1b3d 50%, #1a1625 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid #a855f7;
+            box-shadow: 0 5px 30px rgba(168, 85, 247, 0.3);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+            animation: dreamShift 15s linear infinite;
+            z-index: 0;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #a855f7 0%, #3b82f6 50%, #a855f7 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: neonDream 4s ease-in-out infinite, floatDream 3s ease-in-out infinite;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            animation: dreamGlow 4s ease-in-out infinite;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Sección de código */
+        .code-section {
+            margin-bottom: 3rem;
+            animation: floatDream 4s ease-in-out infinite;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: #a855f7;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '🌙';
+            font-size: 1.5rem;
+        }
+
+        .code-container {
+            background: linear-gradient(145deg, #1a1625 0%, #2d1b3d 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid #a855f7;
+            position: relative;
+            overflow: hidden;
+            animation: dreamGlow 4s ease-in-out infinite;
+        }
+
+        .code-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #a855f7, #3b82f6, #a855f7);
+            background-size: 200% 100%;
+            animation: dreamShift 4s linear infinite;
+        }
+
+        .code-block {
+            background: #0f0a1a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .code-block::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .code-block::-webkit-scrollbar-track {
+            background: #0f0a1a;
+            border-radius: 10px;
+        }
+
+        .code-block::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #a855f7, #3b82f6);
+            border-radius: 10px;
+        }
+
+        /* Sección de glosario */
+        .glossary-section {
+            animation: floatDream 4s ease-in-out infinite 0.5s;
+        }
+
+        .glossary-container {
+            background: linear-gradient(145deg, #1a1625 0%, #2d1b3d 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid #3b82f6;
+            position: relative;
+            overflow: hidden;
+            animation: dreamGlow 4s ease-in-out infinite 1s;
+        }
+
+        .glossary-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #a855f7, #3b82f6);
+            background-size: 200% 100%;
+            animation: dreamShift 4s linear infinite;
+        }
+
+        .function-item {
+            background: #0f0a1a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .function-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #3b82f6, #a855f7);
+            transition: width 0.3s ease;
+        }
+
+        .function-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .function-item:hover::before {
+            width: 100%;
+            opacity: 0.1;
+        }
+
+        .function-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .function-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .function-description {
+            color: #b8a9c9;
+            line-height: 1.6;
+        }
+
+        /* Partículas estilo estrellas de sueño */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #a855f7;
+            border-radius: 50%;
+            animation: stars 5s infinite ease-in-out;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .code-container,
+            .glossary-container {
+                padding: 1.5rem;
+            }
+
+            .code-block {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Partículas de fondo -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>Contar Palabras con Python</h1>
+            <a href="index.html" class="back-btn">← Volver al Inicio</a>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        <!-- Sección de Código -->
+        <section class="code-section">
+            <h2 class="section-title">Código del Ejemplo</h2>
+            <div class="code-container">
+                <pre class="code-block"><code>frase = "python es divertido y poderoso"
+
+frase_limpio = frase.replace(",", "").replace(".", "").lower()
+
+tokens = frase_limpio.split()
+
+frecuencia = {}
+for palabra in tokens:
+    if palabra in frecuencia:
+        frecuencia[palabra] += 1
+    else:
+        frecuencia[palabra] = 1
+
+print(frecuencia)</code></pre>
+            </div>
+        </section>
+
+        <!-- Sección de Glosario -->
+        <section class="glossary-section">
+            <h2 class="section-title">Glosario de Funciones</h2>
+            <div class="glossary-container">
+                <div class="function-item">
+                    <div class="function-name">str.replace(old, new)</div>
+                    <div class="function-description">
+                        Reemplaza todas las ocurrencias de una subcadena por otra. Se usa encadenadamente para eliminar signos de puntuación del texto antes de analizarlo, asegurando que las palabras se procesen correctamente sin caracteres especiales.
+                    </div>
+                </div>
+
+                <div class="function-item">
+                    <div class="function-name">str.lower()</div>
+                    <div class="function-description">
+                        Convierte todos los caracteres del texto a minúsculas. Es esencial para el análisis de frecuencias ya que asegura que palabras como "Python" y "python" se consideren la misma palabra.
+                    </div>
+                </div>
+
+                <div class="function-item">
+                    <div class="function-name">str.split()</div>
+                    <div class="function-description">
+                        Divide la cadena de texto en una lista de palabras (tokens) usando espacios en blanco como separadores. Este proceso de tokenización es fundamental para poder contar cada palabra individualmente.
+                    </div>
+                </div>
+
+                <div class="function-item">
+                    <div class="function-name">dict = {}</div>
+                    <div class="function-description">
+                        Crea un diccionario vacío. En Python, los diccionarios son estructuras de datos que almacenan pares clave-valor. Aquí se usa para almacenar palabras como claves y sus frecuencias como valores.
+                    </div>
+                </div>
+
+                <div class="function-item">
+                    <div class="function-name">for (bucle)</div>
+                    <div class="function-description">
+                        Estructura de control que itera sobre cada elemento de una secuencia. En este caso, recorre todos los tokens (palabras) para contar cuántas veces aparece cada una en el texto.
+                    </div>
+                </div>
+
+                <div class="function-item">
+                    <div class="function-name">if-else (condicional)</div>
+                    <div class="function-description">
+                        Estructura de control que ejecuta diferentes bloques de código según una condición. Aquí verifica si una palabra ya existe en el diccionario: si existe, incrementa su contador; si no, la agrega con valor inicial de 1.
+                    </div>
+                </div>
+
+                <div class="function-item">
+                    <div class="function-name">in (operador)</div>
+                    <div class="function-description">
+                        Operador de pertenencia que verifica si una clave existe en un diccionario. Se utiliza para determinar si la palabra ya ha sido contada anteriormente en el diccionario de frecuencias.
+                    </div>
+                </div>
+
+                <div class="function-item">
+                    <div class="function-name">+= (operador de incremento)</div>
+                    <div class="function-description">
+                        Operador de asignación aumentada que incrementa el valor de una variable. En este código, suma 1 al contador de frecuencia cada vez que una palabra repetida es encontrada.
+                    </div>
+                </div>
+
+                <div class="function-item">
+                    <div class="function-name">print()</div>
+                    <div class="function-description">
+                        Función que muestra información en la consola. Imprime el diccionario completo con todas las palabras y sus respectivas frecuencias de aparición en el texto.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Crear partículas estilo estrellas
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 60;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            particle.style.animationDuration = (Math.random() * 5 + 3) + 's';
+            
+            // Alterna entre púrpura y azul
+            if (Math.random() > 0.5) {
+                particle.style.background = '#3b82f6';
+                particle.style.boxShadow = '0 0 10px rgba(59, 130, 246, 0.8)';
+            }
+            
+            particlesContainer.appendChild(particle);
+        }
+    </script>
+</body>
+</html>

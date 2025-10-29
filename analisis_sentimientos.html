@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Sentimientos con Python</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Anton', sans-serif;
+            background-color: #0a0a0a;
+            color: #fff;
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #4a0066 0%, #003d4d 100%);
+            border-radius: 16px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(138, 0, 184, 0.4);
+        }
+
+        .header h1 {
+            font-family: 'Barlow', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(138, 0, 184, 0.8),
+                         0 0 40px rgba(0, 138, 184, 0.6);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(138, 0, 184, 0.8),
+                             0 0 40px rgba(0, 138, 184, 0.6);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(138, 0, 184, 1),
+                             0 0 60px rgba(0, 138, 184, 0.8);
+            }
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        /* Code Section */
+        .code-section {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid #4a0066;
+            box-shadow: 0 5px 20px rgba(138, 0, 184, 0.3);
+        }
+
+        .code-section h2 {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #8a00b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .code-block {
+            background: #0d0d0d;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            border-left: 4px solid #8a00b8;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .code-block code {
+            color: #e0e0e0;
+        }
+
+        /* Syntax Highlighting */
+        .keyword { color: #8a00b8; }
+        .string { color: #008ab8; }
+        .number { color: #b88a00; }
+        .comment { color: #666; font-style: italic; }
+        .function { color: #008a00; }
+
+        /* Glossary Section */
+        .glossary-section {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid #008ab8;
+            box-shadow: 0 5px 20px rgba(0, 138, 184, 0.3);
+        }
+
+        .glossary-section h2 {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #008ab8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .glossary-item {
+            background: #0d0d0d;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #008ab8;
+            transition: all 0.3s ease;
+        }
+
+        .glossary-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 138, 184, 0.3);
+        }
+
+        .glossary-item h3 {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.2rem;
+            color: #00b8ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .glossary-item p {
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        /* Back Button */
+        .back-button {
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #4a0066, #003d4d);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Anton', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(138, 0, 184, 0.5);
+            border-color: #8a00b8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .code-section, .glossary-section {
+                padding: 1.5rem;
+            }
+
+            .code-block {
+                padding: 1rem;
+            }
+
+            .code-block pre {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← Volver al inicio</a>
+
+        <div class="header">
+            <h1>Análisis de Sentimientos con Python</h1>
+        </div>
+
+        <div class="content-grid">
+            <!-- Código -->
+            <div class="code-section">
+                <h2>📝 Código Python</h2>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Creando listas con las palabras para detectar el sentir de la frase</span>
+<span class="keyword">palabraspositivas</span> = [<span class="string">'feliz'</span>, <span class="string">'contento'</span>, <span class="string">'alegre'</span>, <span class="string">'maravillos'</span>, <span class="string">'bonito'</span>, <span class="string">'bonita'</span>]
+<span class="keyword">palabrasnegativas</span> = [<span class="string">'triste'</span>, <span class="string">'solo'</span>, <span class="string">'aburrido'</span>, <span class="string">'malo'</span>, <span class="string">'deprimido'</span>, <span class="string">'horrible'</span>, <span class="string">'muerte'</span>]
+
+<span class="keyword">frase</span> = <span class="function">input</span>(<span class="string">"ingresa tu frase"</span>)
+
+<span class="keyword">tokens</span> = frase.<span class="function">replace</span>(<span class="string">","</span>, <span class="string">""</span>).<span class="function">replace</span>(<span class="string">":"</span>, <span class="string">""</span>).<span class="function">replace</span>(<span class="string">"."</span>, <span class="string">""</span>).<span class="function">split</span>()
+
+<span class="keyword">positivas</span> = <span class="number">0</span>
+<span class="keyword">negativas</span> = <span class="number">0</span>
+
+<span class="keyword">for</span> palabra <span class="keyword">in</span> tokens:
+    <span class="keyword">if</span> palabra <span class="keyword">in</span> palabraspositivas:
+        positivas += <span class="number">1</span>
+    <span class="keyword">elif</span> palabra <span class="keyword">in</span> palabrasnegativas:
+        negativas += <span class="number">1</span>
+
+<span class="function">print</span>(<span class="string">"Palabras positivas:"</span>, positivas)
+<span class="function">print</span>(<span class="string">"Palabras negativas:"</span>, negativas)
+
+<span class="keyword">if</span> positivas > negativas:
+    <span class="function">print</span>(<span class="string">"La frase es positiva"</span>)
+<span class="keyword">elif</span> negativas > positivas:
+    <span class="function">print</span>(<span class="string">"La frase es negativa"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"La frase es neutral"</span>)</code></pre>
+                </div>
+            </div>
+
+            <!-- Glosario -->
+            <div class="glossary-section">
+                <h2>📚 Glosario de Funciones</h2>
+
+                <div class="glossary-item">
+                    <h3>input()</h3>
+                    <p>Función que permite capturar texto ingresado por el usuario desde la consola. Retorna una cadena de texto con el valor introducido.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>replace(viejo, nuevo)</h3>
+                    <p>Método de cadenas que reemplaza todas las ocurrencias de un substring (viejo) por otro (nuevo). En este caso se usa para eliminar signos de puntuación.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>split()</h3>
+                    <p>Método que divide una cadena de texto en una lista de palabras (tokens), usando espacios en blanco como separador por defecto.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>for...in</h3>
+                    <p>Estructura de control que itera sobre cada elemento de una secuencia (en este caso, cada palabra en la lista de tokens).</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>if...elif...else</h3>
+                    <p>Estructura condicional que evalúa diferentes condiciones. Permite tomar decisiones basadas en si una palabra está en las listas positivas o negativas.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>in (operador)</h3>
+                    <p>Operador que verifica si un elemento está presente en una secuencia (lista, tupla, string). Retorna True si lo encuentra, False en caso contrario.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>print()</h3>
+                    <p>Función que muestra información en la consola. Puede imprimir texto, variables y combinaciones de ambos.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>Tokenización</h3>
+                    <p>Proceso de dividir un texto en unidades más pequeñas llamadas tokens (generalmente palabras). En este código se logra limpiando puntuación y usando split().</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

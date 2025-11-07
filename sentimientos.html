@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentimientos - LeyendItA Chatbot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background: #0f0f23;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            bottom: -100px;
+            right: -100px;
+            animation-delay: 5s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            top: 50%;
+            left: 50%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(100px, -100px) scale(1.1);
+            }
+            66% {
+                transform: translate(-100px, 100px) scale(0.9);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .header h1 {
+            font-family: 'Anton', sans-serif;
+            font-size: 5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 1rem;
+            animation: titlePulse 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.6));
+        }
+
+        @keyframes titlePulse {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.6));
+            }
+            50% {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 50px rgba(102, 126, 234, 0.9));
+            }
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #a0aec0;
+            font-weight: 300;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Chatbot Interactive */
+        .chatbot-section {
+            background: rgba(17, 25, 40, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chatbot-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            animation: borderFlow 3s linear infinite;
+        }
+
+        @keyframes borderFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .chatbot-section h2 {
+            font-family: 'Anton', sans-serif;
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .chat-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            padding: 1.5rem;
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 10px;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            max-width: 80%;
+            animation: messageSlide 0.4s ease;
+            position: relative;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.bot {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            margin-right: auto;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.3), rgba(245, 87, 108, 0.3));
+            border: 1px solid rgba(240, 147, 251, 0.4);
+            margin-left: auto;
+        }
+
+        .message-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Barlow', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-send {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Anton', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-send::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-send:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .sentiment-indicator {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+        }
+
+        .sentiment-indicator.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .sentiment-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .sentiment-fill {
+            height: 100%;
+            transition: width 1s ease, background 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .sentiment-label {
+            font-size: 0.9rem;
+            color: #a0aec0;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Code Section */
+        .code-section {
+            background: rgba(17, 25, 40, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(240, 147, 251, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+        }
+
+        .code-section h2 {
+            font-family: 'Anton', sans-serif;
+            font-size: 2rem;
+            color: #f093fb;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            border: 1px solid rgba(240, 147, 251, 0.2);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .code-block::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .code-block::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .code-block::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #f093fb, #f5576c);
+            border-radius: 10px;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: #e0e0e0;
+        }
+
+        .keyword { color: #f093fb; font-weight: bold; }
+        .string { color: #4facfe; }
+        .function { color: #667eea; font-weight: bold; }
+        .comment { color: #888; font-style: italic; }
+        .variable { color: #f5576c; }
+
+        /* Glossary Full Width */
+        .glossary-section {
+            background: rgba(17, 25, 40, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glossary-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+        }
+
+        .glossary-section h2 {
+            font-family: 'Anton', sans-serif;
+            font-size: 2rem;
+            color: #4facfe;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .glossary-item {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(79, 172, 254, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .glossary-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+            border-color: #4facfe;
+        }
+
+        .glossary-item h3 {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.2rem;
+            color: #4facfe;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .glossary-item p {
+            font-size: 0.95rem;
+            color: #a0aec0;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* Back Button */
+        .back-button {
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-family: 'Anton', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 3rem;
+            }
+
+            .chatbot-section, .code-section, .glossary-section {
+                padding: 1.5rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .glossary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <a href="index.html" class="back-button">← Volver al inicio</a>
+
+        <div class="header">
+            <h1>Sentimientos</h1>
+            <p class="subtitle">Análisis de Emociones con LeyendItA Chatbot</p>
+        </div>
+
+        <div class="main-grid">
+            <!-- Chatbot Interactivo -->
+            <div class="chatbot-section">
+                <h2>💬 Chatbot Interactivo</h2>
+                <div class="chat-container" id="chatContainer">
+                    <div class="message bot">
+                        <div class="message-label">LeyendItA</div>
+                        <div>Hola soy LeyendItA, tu chatbot de confianza! Hoy solo puedo atenderte en tus sentimientos, así que sin saludos, directo al grano... ¿Cómo te sientes?</div>
+                    </div>
+                </div>
+                
+                <div class="sentiment-indicator" id="sentimentIndicator">
+                    <div class="sentiment-label">Polaridad del sentimiento</div>
+                    <div class="sentiment-bar">
+                        <div class="sentiment-fill" id="sentimentFill"></div>
+                    </div>
+                    <div id="sentimentText"></div>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" class="chat-input" id="userInput" placeholder="Escribe cómo te sientes...">
+                    <button class="btn-send" onclick="sendMessage()">
+                        <span style="position: relative; z-index: 1;">Enviar</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Código -->
+            <div class="code-section">
+                <h2>📝 Código Python</h2>
+                <div class="code-block">
+                    <pre><code><span class="keyword">import</span> <span class="function">random</span>
+<span class="keyword">from</span> random <span class="keyword">import</span> choice
+<span class="keyword">import</span> <span class="function">textblob</span>
+<span class="keyword">from</span> textblob <span class="keyword">import</span> TextBlob
+<span class="keyword">from</span> deep_translator <span class="keyword">import</span> GoogleTranslator
+
+<span class="variable">saludos</span> = [<span class="string">"hola"</span>, <span class="string">"que tal"</span>, <span class="string">"buenas tardes"</span>, <span class="string">"buenos dias"</span>, <span class="string">"buen dia"</span>]
+<span class="variable">respuesta_saludos</span> = [<span class="string">"hola, como estas?"</span>,
+                   <span class="string">"como te sientes??"</span>,
+                   <span class="string">"hola, estas bien?"</span>,
+                   <span class="string">"quieres hablar de tus sentimientos?"</span>]
+
+<span class="function">print</span>(<span class="string">"Hola soy LeyendItA, tu chatbot de confianza!, Hoy solo puedo atenderte en tus sentimientos!"</span>
+      <span class="string">"así que sin saludos!, directo al grano.. ¿Como te sientes?"</span>)
+
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    <span class="variable">usuario</span> = <span class="function">input</span>(<span class="string">"Tu:"</span>).<span class="function">lower</span>().<span class="function">strip</span>()
+    <span class="variable">ingles</span> = <span class="function">GoogleTranslator</span>(source=<span class="string">'es'</span>, target=<span class="string">'en'</span>).<span class="function">translate</span>(usuario)
+    <span class="variable">analizar</span> = <span class="function">TextBlob</span>(ingles)
+    <span class="variable">sentimiento</span> = analizar.sentiment
+    <span class="variable">polaridad</span> = sentimiento.polarity
+
+    <span class="keyword">if</span> polaridad > <span class="string">0.5</span>:
+        <span class="variable">respuestas_muyp</span> = [<span class="string">"Me alegra mucho que estes tan bien!"</span>, <span class="string">"Excelente noticia!"</span>, <span class="string">"Es una gran noticia!"</span>]
+        <span class="function">print</span>(<span class="string">"LeyendItA:"</span>, random.<span class="function">choice</span>(respuestas_muyp))
+    <span class="keyword">elif</span> polaridad > <span class="string">0</span>:
+        <span class="variable">respuestas_p</span> = [<span class="string">"Que bien!"</span>, <span class="string">"Me alegro!"</span>, <span class="string">"Bien!"</span>]
+        <span class="function">print</span>(<span class="string">"LeyendItA:"</span>, random.<span class="function">choice</span>(respuestas_p))
+    <span class="keyword">elif</span> polaridad == <span class="string">0</span>:
+        <span class="variable">respuestas_n</span> = [<span class="string">"me alegro"</span>, <span class="string">"nada mal"</span>, <span class="string">"wao"</span>]
+        <span class="function">print</span>(<span class="string">"LeyendItA"</span>, random.<span class="function">choice</span>(respuestas_n))
+    <span class="keyword">elif</span> polaridad < <span class="string">-0.1</span>:
+        <span class="variable">respuestas_ne</span> = [<span class="string">"Lo siento..."</span>, <span class="string">"Quieres hablar con alguien?"</span>, <span class="string">"Lamento eso"</span>]
+        <span class="function">print</span>(<span class="string">"LeyendItA:"</span>, random.<span class="function">choice</span>(respuestas_ne))
+    <span class="keyword">elif</span> polaridad < <span class="string">-0.5</span>:
+        <span class="variable">respuestas_muyne</span> = [<span class="string">"Perdón que no pueda ayudarte..."</span>, <span class="string">"Quisiera ayudarte, como puedo?"</span>, <span class="string">"Lamento eso, necesitas ayuda?"</span>]
+        <span class="function">print</span>(<span class="string">"LeyendItA:"</span>, random.<span class="function">choice</span>(respuestas_muyne))</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Glosario Full Width -->
+        <div class="glossary-section">
+            <h2>📚 Glosario de Funciones y Librerías</h2>
+            <div class="glossary-grid">
+                <div class="glossary-item">
+                    <h3>TextBlob</h3>
+                    <p>Librería de procesamiento de lenguaje natural que proporciona una API simple para análisis de sentimientos, traducción, y más tareas de NLP.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>GoogleTranslator</h3>
+                    <p>Clase de deep_translator que permite traducir texto entre diferentes idiomas usando la API de Google Translate. Esencial para analizar sentimientos en español.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>random.choice()</h3>
+                    <p>Función que selecciona un elemento aleatorio de una secuencia. Se usa para variar las respuestas del chatbot y hacerlo más natural.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>sentiment.polarity</h3>
+                    <p>Propiedad que retorna un valor entre -1 (muy negativo) y 1 (muy positivo) indicando la polaridad del sentimiento en el texto analizado.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>lower()</h3>
+                    <p>Método que convierte todo el texto a minúsculas para facilitar la comparación y el análisis sin distinción de mayúsculas.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>strip()</h3>
+                    <p>Elimina espacios en blanco al inicio y final de una cadena, limpiando la entrada del usuario antes de procesarla.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>while True</h3>
+                    <p>Bucle infinito que mantiene el chatbot activo, permitiendo múltiples interacciones consecutivas con el usuario hasta que se detenga manualmente.</p>
+                </div>
+
+                <div class="glossary-item">
+                    <h3>if...elif...else</h3>
+                    <p>Estructura condicional que evalúa la polaridad del sentimiento y selecciona la respuesta apropiada según si es muy positivo, positivo, neutral, negativo o muy negativo.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chatContainer');
+        const sentimentIndicator = document.getElementById('sentimentIndicator');
+        
+        // Respuestas del bot según polaridad
+        const responses = {
+            veryPositive: ["Me alegra mucho que estés tan bien!", "¡Excelente noticia!", "¡Es una gran noticia!"],
+            positive: ["¡Qué bien!", "¡Me alegro!", "¡Bien!"],
+            neutral: ["Me alegro", "Nada mal", "Wao"],
+            negative: ["Lo siento...", "¿Quieres hablar con alguien?", "Lamento eso"],
+            veryNegative: ["Perdón que no pueda ayudarte...", "Quisiera ayudarte, ¿cómo puedo?", "Lamento eso, ¿necesitas ayuda?"]
+        };
+
+        function analyzeSentiment(text) {
+            // Palabras positivas y negativas para simulación
+            const positive = ['feliz', 'contento', 'alegre', 'excelente', 'maravilloso', 'genial', 'bien', 'amor', 'increíble', 'fantástico'];
+            const negative = ['triste', 'mal', 'horrible', 'terrible', 'malo', 'deprimido', 'solo', 'odio', 'feo', 'aburrido'];
+            
+            const words = text.toLowerCase().split(' ');
+            let score = 0;
+            
+            words.forEach(word => {
+                if (positive.some(p => word.includes(p))) score += 0.3;
+                if (negative.some(n => word.includes(n))) score -= 0.3;
+            });
+            
+            return Math.max(-1, Math.min(1, score));
+        }
+
+        function getResponse(polarity) {
+            if (polarity > 0.5) return responses.veryPositive[Math.floor(Math.random() * responses.veryPositive.length)];
+            if (polarity > 0) return responses.positive[Math.floor(Math.random() * responses.positive.length)];
+            if (polarity === 0) return responses.neutral[Math.floor(Math.random() * responses.neutral.length)];
+            if (polarity < -0.5) return responses.veryNegative[Math.floor(Math.random() * responses.veryNegative.length)];
+            return responses.negative[Math.floor(Math.random() * responses.negative.length)];
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Mensaje del usuario
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.innerHTML = `<div class="message-label">Tú</div><div>${message}</div>`;
+            chatContainer.appendChild(userMsg);
+            
+            // Analizar sentimiento
+            const polarity = analyzeSentiment(message);
+            
+            // Actualizar indicador
+            sentimentIndicator.classList.add('show');
+            const fill = document.getElementById('sentimentFill');
+            const percentage = ((polarity + 1) / 2) * 100;
+            fill.style.width = percentage + '%';
+            
+            if (polarity > 0.5) {
+                fill.style.background = 'linear-gradient(90deg, #

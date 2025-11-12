@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Placas - JJK Gamer Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 20px currentColor); }
+            50% { filter: brightness(1.3) drop-shadow(0 0 30px currentColor); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            padding: 20px;
+            color: #ffffff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(220, 38, 127, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(15, 15, 25, 0.95) 0%, rgba(20, 20, 35, 0.95) 100%);
+            border-radius: 20px;
+            padding: 48px;
+            box-shadow: 
+                0 0 60px rgba(220, 38, 127, 0.3),
+                0 0 100px rgba(138, 43, 226, 0.2),
+                0 20px 80px rgba(0, 0, 0, 0.8);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #dc267f, #8a2be2, #3b82f6, #06b6d4, #8a2be2, #dc267f);
+            border-radius: 20px;
+            z-index: -1;
+            animation: glow 3s ease-in-out infinite;
+            background-size: 400% 400%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(90deg, transparent, #dc267f, #8a2be2, #3b82f6, transparent) bottom;
+            background-size: 100% 3px;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #dc267f 0%, #8a2be2 35%, #3b82f6 70%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-shadow: 0 0 40px rgba(220, 38, 127, 0.5);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .subtitle {
+            color: #c084fc;
+            font-size: 1.2rem;
+            font-weight: 400;
+            text-shadow: 0 0 20px rgba(192, 132, 252, 0.5);
+        }
+
+        .code-section {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(20, 10, 30, 0.7) 100%);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-section::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(90deg, #dc267f, #8a2be2, #3b82f6);
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .code-section h2 {
+            background: linear-gradient(90deg, #dc267f, #8a2be2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 24px;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        pre {
+            background: #000000;
+            padding: 24px;
+            border-radius: 12px;
+            overflow-x: auto;
+            line-height: 1.7;
+            border: 1px solid rgba(220, 38, 127, 0.3);
+            box-shadow: inset 0 0 30px rgba(138, 43, 226, 0.1);
+        }
+
+        code {
+            color: #c084fc;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre;
+        }
+
+        .keyword {
+            color: #dc267f;
+            font-weight: 600;
+        }
+
+        .string {
+            color: #06b6d4;
+        }
+
+        .function {
+            color: #8a2be2;
+            font-weight: 500;
+        }
+
+        .comment {
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .number {
+            color: #f472b6;
+        }
+
+        .glossary {
+            background: linear-gradient(135deg, rgba(10, 10, 20, 0.8) 0%, rgba(30, 20, 40, 0.8) 100%);
+            border-radius: 16px;
+            padding: 32px;
+            border: 2px solid rgba(138, 43, 226, 0.4);
+            box-shadow: 
+                0 0 40px rgba(220, 38, 127, 0.2),
+                inset 0 0 40px rgba(59, 130, 246, 0.05);
+        }
+
+        .glossary h2 {
+            background: linear-gradient(90deg, #dc267f, #8a2be2, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+            font-size: 2rem;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .glossary-item {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(30, 10, 40, 0.6) 100%);
+            padding: 24px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #dc267f;
+            border-right: 4px solid #3b82f6;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glossary-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(220, 38, 127, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .glossary-item:hover::before {
+            left: 100%;
+        }
+
+        .glossary-item:hover {
+            transform: translateX(8px) scale(1.02);
+            box-shadow: 
+                0 8px 30px rgba(220, 38, 127, 0.4),
+                0 8px 30px rgba(59, 130, 246, 0.3);
+            border-left-color: #8a2be2;
+            border-right-color: #06b6d4;
+        }
+
+        .function-name {
+            background: linear-gradient(90deg, #dc267f, #8a2be2, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            font-family: 'Consolas', monospace;
+        }
+
+        .function-desc {
+            color: #e2e8f0;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .function-example {
+            background: #000000;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            color: #c084fc;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            border: 1px solid rgba(138, 43, 226, 0.4);
+            line-height: 1.6;
+            box-shadow: 0 0 20px rgba(220, 38, 127, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .code-section, .glossary {
+                padding: 20px;
+            }
+
+            pre {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .glossary-item {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 OCR PLACAS</h1>
+            <p class="subtitle">Sistema de reconocimiento de placas vehiculares</p>
+        </div>
+
+        <div class="code-section">
+            <h2>⚡ Código del Ejemplo</h2>
+            <pre><code><span class="keyword">import</span> cv2
+<span class="keyword">import</span> pytesseract
+
+pytesseract.pytesseract.tesseract_cmd=<span class="string">r"C:\Users\ADMIN\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"</span>
+
+<span class="string">"Lista de placas aceptadas en el estacionamiento del CBTIS144"</span>
+<span class="keyword">placas_autorizadas</span>=[<span class="string">"XYZ789"</span>,<span class="string">"/"</span>,<span class="string">"DRU-029-G"</span>,<span class="string">"/"</span>,<span class="string">"ADH-123-A"</span>,<span class="string">"/"</span>,<span class="string">"QWE-789-Q"</span>,<span class="string">"/"</span>,<span class="string">"CW-5671-F"</span>,<span class="string">"/"</span>,<span class="string">"DSZ-999-Z"</span>]
+<span class="function">print</span>(<span class="string">""</span>)
+<span class="function">print</span>(<span class="string">"Placas registradas"</span>,*placas_autorizadas)
+<span class="function">print</span>(<span class="string">"----------------------------------------------------------------------------------------------"</span>)
+
+<span class="comment">#cargar placa a leer</span>
+<span class="keyword">placa</span>=cv2.<span class="function">imread</span>(<span class="string">"placas.jpg"</span>)
+<span class="keyword">placanueva</span>=cv2.<span class="function">resize</span>(placa,(<span class="number">800</span>,<span class="number">300</span>))
+<span class="keyword">placa2</span>=cv2.<span class="function">imread</span>(<span class="string">"placas1.PNG"</span>)
+<span class="keyword">placanueva2</span>=cv2.<span class="function">resize</span>(placa2,(<span class="number">800</span>,<span class="number">300</span>))
+
+<span class="comment">#convertir a escala de grises</span>
+<span class="keyword">placa_gris</span>=cv2.<span class="function">cvtColor</span>(placanueva,cv2.COLOR_BGR2GRAY)
+<span class="keyword">placa_gris2</span>=cv2.<span class="function">cvtColor</span>(placanueva2,cv2.COLOR_BGR2GRAY)
+
+
+<span class="comment">#separamos el fondo con el texto</span>
+<span class="keyword">placa_res</span>=cv2.<span class="function">threshold</span>(placa_gris,<span class="number">120</span>,<span class="number">255</span>,cv2.THRESH_BINARY)[<span class="number">1</span>]
+<span class="keyword">placa_res2</span>=cv2.<span class="function">threshold</span>(placa_gris2,<span class="number">120</span>,<span class="number">255</span>,cv2.THRESH_BINARY)[<span class="number">1</span>]
+
+
+<span class="comment">#configurar OCR</span>
+<span class="keyword">placa_texto</span>=pytesseract.<span class="function">image_to_string</span>(placa_res,lang=<span class="string">"spa"</span>)
+<span class="keyword">placa_texto2</span>=pytesseract.<span class="function">image_to_string</span>(placa_res2,lang=<span class="string">"spa"</span>)
+
+
+<span class="comment">#limpiamos la cadena de texto</span>
+<span class="keyword">placa_texto_limpio</span>=placa_texto.<span class="function">strip</span>().<span class="function">replace</span>(<span class="string">" "</span>,<span class="string">""</span>)
+<span class="keyword">placa_texto_limpio2</span>=placa_texto2.<span class="function">strip</span>().<span class="function">replace</span>(<span class="string">" "</span>,<span class="string">""</span>)
+
+
+<span class="comment">#buscar la placa en la lista autorizada</span>
+<span class="keyword">if</span> placa_texto_limpio <span class="keyword">in</span> placas_autorizadas:
+    <span class="function">print</span>(<span class="string">"ACCESO PERMITDO!! \nBIENVENIDO AL ESTACIONAMIENTO DEL CBTIS 144"</span>)
+    <span class="function">print</span>(placa_texto)
+    <span class="keyword">if</span> placa_texto_limpio <span class="keyword">in</span> placas_autorizadas:
+        placas_autorizadas.<span class="function">remove</span>(placa_texto_limpio)
+        <span class="function">print</span>(<span class="string">"Placas que no han ingresado: "</span>,*placas_autorizadas)
+    <span class="function">print</span>(<span class="string">"Placas que han ingresado: "</span>,placa_texto_limpio)
+    <span class="function">print</span>(<span class="string">"----------------------------------------------------------------------------------------------"</span>)
+
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"PLACA NO REGISTRADA"</span>)
+    <span class="function">print</span>(placa_texto)
+    <span class="function">print</span>(*placas_autorizadas)
+
+<span class="keyword">if</span> placa_texto_limpio2 <span class="keyword">in</span> placas_autorizadas:
+    <span class="function">print</span>(<span class="string">"ACCESO PERMITDO!! \nBIENVENIDO AL ESTACIONAMIENTO DEL CBTIS 144"</span>)
+    <span class="function">print</span>(placa_texto2)
+    <span class="keyword">if</span> placa_texto_limpio2 <span class="keyword">in</span> placas_autorizadas:
+        placas_autorizadas.<span class="function">remove</span>(placa_texto_limpio2)
+        <span class="function">print</span>(<span class="string">"Placas que no han ingresado: "</span>,*placas_autorizadas)
+        <span class="function">print</span>(<span class="string">"Placas que han ingresado: "</span>, placa_texto_limpio,<span class="string">"/"</span>,placa_texto_limpio2)
+
+    <span class="function">print</span>(<span class="string">"----------------------------------------------------------------------------------------------"</span>)
+
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"PLACA NO REGISTRADA"</span>)
+    <span class="function">print</span>(placa_texto2)
+    <span class="function">print</span>(<span class="string">"Placas que no han ingresado: "</span>,*placas_autorizadas)
+
+
+cv2.<span class="function">imshow</span>(<span class="string">"imagen analizada"</span>,placanueva)
+cv2.<span class="function">imshow</span>(<span class="string">"imagen analizada 2"</span>,placanueva2)
+cv2.<span class="function">waitKey</span>(<span class="number">0</span>)
+cv2.<span class="function">destroyAllWindows</span>()</code></pre>
+        </div>
+
+        <div class="glossary">
+            <h2>📚 Glosario de Funciones</h2>
+
+            <div class="glossary-item">
+                <div class="function-name">import cv2 / import pytesseract</div>
+                <div class="function-desc">
+                    Importa las librerías necesarias para el proyecto. cv2 (OpenCV) proporciona herramientas de procesamiento de imágenes, mientras que pytesseract es el wrapper de Python para Tesseract-OCR que permite el reconocimiento óptico de caracteres.
+                </div>
+                <div class="function-example">
+                    import cv2<br>
+                    import pytesseract<br>
+                    # Importa librerías para OCR e imágenes
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">pytesseract.tesseract_cmd</div>
+                <div class="function-desc">
+                    Configura la ruta del ejecutable de Tesseract-OCR en el sistema. Es necesario especificar la ubicación exacta donde está instalado Tesseract para que pytesseract pueda encontrarlo y ejecutarlo correctamente.
+                </div>
+                <div class="function-example">
+                    pytesseract.pytesseract.tesseract_cmd = r"C:\...\tesseract.exe"<br>
+                    # Configura ruta del ejecutable
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">Listas de placas autorizadas</div>
+                <div class="function-desc">
+                    Lista que almacena todas las placas vehiculares registradas y autorizadas para acceder al estacionamiento. Incluye separadores "/" para visualización. Se usa para verificar si una placa detectada tiene acceso permitido.
+                </div>
+                <div class="function-example">
+                    placas_autorizadas = ["XYZ789", "DRU-029-G", "ADH-123-A"]<br>
+                    # Lista con placas registradas
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">Operador * (desempaquetado)</div>
+                <div class="function-desc">
+                    Operador de desempaquetado que expande una lista para imprimir sus elementos separados por espacios, en lugar de mostrar la lista con corchetes. Hace más legible la salida al mostrar las placas registradas.
+                </div>
+                <div class="function-example">
+                    placas = ["ABC", "DEF", "GHI"]<br>
+                    print(*placas)<br>
+                    # Imprime: ABC DEF GHI (sin corchetes)
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.imread()</div>
+                <div class="function-desc">
+                    Carga una imagen desde un archivo del disco. Lee las imágenes de las placas vehiculares ("placas.jpg" y "placas1.PNG") para procesarlas y extraer el texto mediante OCR.
+                </div>
+                <div class="function-example">
+                    placa = cv2.imread("placa_vehiculo.jpg")<br>
+                    # Carga la imagen de la placa
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.resize()</div>
+                <div class="function-desc">
+                    Redimensiona las imágenes a un tamaño estándar de 800x300 píxeles. Estandarizar el tamaño ayuda a mejorar la consistencia del procesamiento y facilita el reconocimiento OCR.
+                </div>
+                <div class="function-example">
+                    imagen_nueva = cv2.resize(imagen, (800, 300))<br>
+                    # Redimensiona a 800x300 píxeles
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.cvtColor()</div>
+                <div class="function-desc">
+                    Convierte las imágenes de color BGR a escala de grises. Este preprocesamiento simplifica la imagen eliminando información de color, lo que mejora significativamente la precisión del OCR al enfocarse solo en la intensidad de los píxeles.
+                </div>
+                <div class="function-example">
+                    img_gris = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)<br>
+                    # Convierte a escala de grises
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.threshold()</div>
+                <div class="function-desc">
+                    Aplica umbralización binaria con valor de 120 para separar el texto del fondo. Los píxeles por debajo de 120 se vuelven negros (0) y los superiores blancos (255), creando alto contraste que facilita la lectura de caracteres por el OCR.
+                </div>
+                <div class="function-example">
+                    img_binaria = cv2.threshold(img_gris, 120, 255, cv2.THRESH_BINARY)[1]<br>
+                    # Crea imagen blanco/negro con umbral 120
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">pytesseract.image_to_string()</div>
+                <div class="function-desc">
+                    Función principal que realiza el OCR sobre las imágenes procesadas. Extrae el texto de las placas vehiculares y lo devuelve como string. El parámetro lang="spa" configura el reconocimiento para español.
+                </div>
+                <div class="function-example">
+                    texto = pytesseract.image_to_string(imagen, lang="spa")<br>
+                    # Extrae texto de la imagen en español
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">.strip() y .replace()</div>
+                <div class="function-desc">
+                    Métodos encadenados para limpiar el texto extraído. strip() elimina espacios al inicio y final, mientras que replace(" ", "") elimina todos los espacios internos. Esto normaliza el formato de la placa para comparación exacta.
+                </div>
+                <div class="function-example">
+                    texto_limpio = texto.strip().replace(" ", "")<br>
+                    # "ABC 123 " → "ABC123"
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">Operador in</div>
+                <div class="function-desc">
+                    Verifica si el texto de la placa limpia está presente en la lista de placas autorizadas. Devuelve True si la placa está registrada y False si no lo está, determinando si se permite o deniega el acceso.
+                </div>
+                <div class="function-example">
+                    if placa_texto_limpio in placas_autorizadas:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print("ACCESO PERMITIDO")<br>
+                    # Verifica si está en la lista
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">.remove()</div>
+                <div class="function-desc">
+                    Método que elimina un elemento específico de la lista. Cuando una placa ingresa al estacionamiento, se remueve de la lista de placas autorizadas pendientes de ingreso, permitiendo rastrear qué vehículos ya han entrado.
+                </div>
+                <div class="function-example">
+                    placas_autorizadas.remove("XYZ789")<br>
+                    # Elimina "XYZ789" de la lista
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">\n (salto de línea)</div>
+                <div class="function-desc">
+                    Carácter especial que representa un salto de línea dentro de strings. Se usa en los mensajes de acceso permitido para separar "ACCESO PERMITIDO!!" de "BIENVENIDO AL ESTACIONAMIENTO" en diferentes líneas.
+                </div>
+                <div class="function-example">
+                    print("ACCESO PERMITIDO!!\nBIENVENIDO")<br>
+                    # Imprime en dos líneas separadas
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.imshow()</div>
+                <div class="function-desc">
+                    Muestra las imágenes procesadas en ventanas emergentes. Permite visualizar las placas analizadas para verificar la calidad del procesamiento y el reconocimiento realizado por el sistema.
+                </div>
+                <div class="function-example">
+                    cv2.imshow("imagen analizada", imagen)<br>
+                    # Muestra la imagen en una ventana
+                </div>
+            </div>
+
+            <div class="glossary-item">
+                <div class="function-name">cv2.waitKey() y cv2.destroyAllWindows()</div>
+                <div class="function-desc">
+                    waitKey(0) mantiene las ventanas abiertas hasta que se presione una tecla. destroyAllWindows() cierra todas las ventanas de OpenCV al finalizar, liberando recursos del sistema correctamente.
+                </div>
+                <div class="function-example">
+                    cv2.waitKey(0)<br>
+                    cv2.destroyAllWindows()<br>
+                    # Espera y cierra ventanas
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
